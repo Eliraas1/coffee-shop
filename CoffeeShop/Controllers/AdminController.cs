@@ -43,16 +43,10 @@ namespace CoffeeShop.Controllers
             
         }
 
-        public ActionResult editPage()
-        {
-            List<coffee> coffeList = (new coffeeDal()).Coffee.ToList<coffee>();
-            return View("EditCoffee", coffeList);
-        }
-
+        
 
         public ActionResult EditCoffee()
         {
-
             string newPrice = Request.Form["newPrice"];
             string key = null;
             if (Request.Form.AllKeys.Length == 0)
@@ -63,7 +57,7 @@ namespace CoffeeShop.Controllers
             string newName = Request.Form["newName"];
 
             if (key == null)
-                return View("EditCoffee");
+                return View("Index");
 
             coffeeDal cd = new coffeeDal();
             coffee removed = cd.Coffee.Find(key);
@@ -78,22 +72,20 @@ namespace CoffeeShop.Controllers
             
             cd.Coffee.Add(removed);
             cd.SaveChanges();
-            return View("EditCoffee");
+
+            List<user> users = (new UserDal()).Users.ToList<user>();
+
+            List<coffee> coffeList = (new coffeeDal()).Coffee.ToList<coffee>();
+
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("users", users);
+            dict.Add("coffee", coffeList);
+
+
+            return View("Index",dict);
         }
 
-        public void sqlCmd(string value,string key)
-        {
-            SqlConnection con = new SqlConnection("Data Source=DESKTOP-U2T54MF;database=CoffeProj;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand(@"update[dbo].[coffee]
-                                                set name = @value
-                                                where name = @key", con);
-
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-        }
-
-
+       
 
     }
 }
