@@ -38,9 +38,7 @@ namespace CoffeeShop.Controllers
                     Session["pass"] = dr.GetValue(2).ToString();
                     Session["role"] = dr.GetValue(3).ToString();
                 }
-
                 return RedirectToAction("Index", "Home");
-
 
             }
             else
@@ -85,3 +83,8 @@ namespace CoffeeShop.Controllers
         }
     }
 }
+
+
+
+
+
