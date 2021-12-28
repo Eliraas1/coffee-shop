@@ -55,7 +55,7 @@ namespace CoffeeShop.Controllers
             string role = "customer";
             var email = Request.Form["email"];
             var pass = Request.Form["pass"];
-            SqlConnection con = new SqlConnection("Data Source=DESKTOP-U2T54MF;database=CoffeProj;Integrated Security=True");
+            SqlConnection con = new SqlConnection("Data Source=HIZO-PC;database=users;Integrated Security=True");
             SqlCommand cmd = new SqlCommand(@"INSERT INTO [dbo].[users]
            ([name]
            ,[email]
