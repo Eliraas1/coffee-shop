@@ -441,7 +441,6 @@
     <Content Include="scss\bootstrap\_variables.scss" />
     <Content Include="scss\style.scss" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\EditCoffee.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />

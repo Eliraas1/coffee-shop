@@ -43,6 +43,19 @@ namespace CoffeeShop
               url: "EditCoffee",
               defaults: new { controller = "Admin", action = "EditCoffee", id = UrlParameter.Optional }
           );
+
+            routes.MapRoute(
+              name: "Admin",
+              url: "Admin",
+              defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional }
+          );
+
+            routes.MapRoute(
+              name: "addUser",
+              url: "AddUser",
+              defaults: new { controller = "Admin", action = "AddUser", id = UrlParameter.Optional }
+          );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

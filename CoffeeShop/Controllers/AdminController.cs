@@ -83,6 +83,10 @@ namespace CoffeeShop.Controllers
             string email = Request.Form["email"];
             string pass = Request.Form["pass"];
             string role = Request.Form["role"];
+
+            if (email.Equals(""))
+                return RedirectToAction("Index");
+
             user newUser = new user(fn, email, pass, role);
             usersd.Users.Add(newUser);
             usersd.SaveChanges();
@@ -97,7 +101,7 @@ namespace CoffeeShop.Controllers
             //};
 
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Admin");
         }
        
 
