@@ -46,7 +46,29 @@ namespace CoffeeShop.Controllers
 
         }
 
-        
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: coffees/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "id,name,img,price,IsAlcohol")] coffee coffee)
+        {
+
+            if (ModelState.IsValid)
+            {
+                coffeeDal db = new coffeeDal();
+                db.Coffee.Add(coffee);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(coffee);
+        }
 
         public ActionResult EditCoffee()
         {
@@ -104,6 +126,11 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Index", "Admin");
         }
        
+        public ActionResult AddDrinks()
+        {
 
+
+            return RedirectToAction("Index");
+        }
     }
 }

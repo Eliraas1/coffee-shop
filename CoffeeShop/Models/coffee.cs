@@ -16,5 +16,7 @@ namespace CoffeeShop.Models
 
         public string img { get; set; }
         public string price { get; set; }
+
+        public bool IsAlcohol { get; set; }
     }
 }

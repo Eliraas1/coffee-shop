@@ -9,6 +9,9 @@
     roles.Add("admin");
     roles.Add("customer");
     roles.Add("barista");
+    string[] a = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+
+
     if (Model != null && Model["users"] != null)
     {
         users = Model["users"];
@@ -38,7 +41,9 @@
                     <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <a class="nav-link active" id="v-pills-0-tab" data-toggle="pill" href="#v-pills-0" role="tab" aria-controls="v-pills-0" aria-selected="true">Users</a>
                         <a class="nav-link" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="false">Edit Coffees</a>
-                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Add Users</a>
+                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">
+                            @Html.ActionLink("Add Drinks", "Create")
+                        </a>
                         <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Desserts</a>
                     </div>
                     <!--Add Users ----Search Users---- Show Users-->
@@ -46,7 +51,7 @@
                         <div class="tab-pane fade show active" id="v-pills-0" role="tabpanel" aria-labelledby="v-pills-0-tab">
                             <br />
                             <!--Search Users-->
-                            <div class="col-md-17 mb-7"style="width: 30%; margin: auto;">
+                            <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
                                 <form action="SearchUser" method="post">
                                     <div class="row d-md-flex col-15 ">
                                         <div class="input-group">
@@ -137,7 +142,12 @@
                                             <div class="col-md-3">
                                                 <div class="menu-entry">
                                                     <form action="EditCoffee" method="post">
+                                                        @if (!c.IsAlcohol)
+                                                        {
                                                         <a href="#" class="img" style="background-image: url(../../images/menu-@(c.img).jpg);"></a>
+                                                        }
+                                                        @if(c.IsAlcohol)
+                                                            {<a href="#" class="img" style="background-image: url(../../images/drink-@(c.img).jpg);"></a> }
                                                         <div class="text text-center pt-4">
                                                             <h3><a href="#" name="key">@c.name</a></h3>
                                                             <p class="price"><span>$@c.price</span></p>
@@ -156,22 +166,14 @@
                             </section>
                         </div>
                         <!--Add  Coffee-->
+                        
                         <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
                             <section class="ftco-section">
                                 <div class="container">
-                                    <form action="AddUser" method="post">
-                                        <input type="text" class="form-control" placeholder="Full Name" name="fn">
-                                        <input type="email" class="form-control" placeholder="Email" name="email">
-                                        <input type="password" class="form-control" placeholder="Password Name" name="pass">
-
-                                        <select class="form-control" name="role">
-                                            @foreach (string role in roles)
-                                            {
-                                                <option style="background: black">@role</option>
-                                            }
-                                        </select>
-                                        <p></p>
-                                        <button type="submit" class="btn btn-primary py-3 px-4">Add User</button>
+                                    <form action="AddDrinks" method="post">
+                                        <p>
+                                            @Html.ActionLink("Create New", "Create")
+                                        </p>
                                     </form>
                                 </div>
                             </section>
@@ -188,3 +190,4 @@
 <script src="~/Scripts/js-admin/bootstrap.min.js"></script>
 <script src="~/Scripts/js-admin/jquery-3.3.1.min.js"></script>
 <script src="~/Scripts/js-admin/main.js"></script>
+
