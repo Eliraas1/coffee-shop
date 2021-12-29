@@ -8,28 +8,27 @@ using System.Configuration;
 using System.Web.Routing;
 using CoffeeShop.Dal;
 using CoffeeShop.Models;
+using System.Text.RegularExpressions;
 
 namespace CoffeeShop.Controllers
 {
     public class AdminController : Controller
     {
+        private drinksDal db = new drinksDal();
+        private UserDal udb = new UserDal();
         // GET: Admin
         public ActionResult Index(List<user> users)
         {
             if (TempData["users"] != null)
-                users = (List<user>) TempData["users"];
-            if(users == null)
-                users = (new UserDal()).Users.ToList<user>();
-            
-            List<coffee> coffeList = (new coffeeDal()).Coffee.ToList<coffee>();
+                users = (List<user>)TempData["users"];
+            if (users == null)
+                users = udb.Users.ToList<user>();
 
-            Dictionary<string, object> dict = new Dictionary<string, object>
-            {
-                { "users", users },
-                { "coffee", coffeList }
-            };
+            List<Drink> drinkList = (db).Drink.ToList<Drink>();
 
-            return View(dict);
+            TempData["users"] = users;
+            TempData["drinks"] = drinkList;
+            return View();
         }
 
         [HttpPost]
@@ -46,51 +45,52 @@ namespace CoffeeShop.Controllers
 
         }
 
+
+        [HttpPost]
         public ActionResult Create()
         {
-            return View();
-        }
+            bool al = false;
+            string name = Request.Form["name"];
+            string img = Request.Form["img"];
 
-        // POST: coffees/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "name,img,price,IsAlcohol,amount")] coffee coffee)
-        {
-            
-            if (ModelState.IsValid)
-            {
-                coffeeDal db = new coffeeDal();
-                db.Coffee.Add(coffee);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            if (img.Contains("drink"))
+                al = true;
 
-            return View(coffee);
+            string resultString = Regex.Match(img, @"\d+").Value;
+            string price = Request.Form["price"];
+            int am = int.Parse(Request.Form["amount"]);
+            Drink drink = new Drink(name, resultString, price, al, am);
+            db.Drink.Add(drink);
+            db.SaveChanges();
+
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult EditCoffee()
         {
             string newPrice = Request.Form["newPrice"];
+            string newAmount = Request.Form["newAmount"];
+
             string coffeeKey = null;
             if (Request.Form.AllKeys.Length != 0)
-                coffeeKey = Request.Form.AllKeys[1];
+                coffeeKey = Request.Form.AllKeys[2];
 
             if (coffeeKey == null)
                 return RedirectToAction("Index");
 
-            coffeeDal cd = new coffeeDal();
-            coffee updatedCoffee = cd.Coffee.Find(int.Parse(coffeeKey));
-            cd.Coffee.Remove(updatedCoffee);
-            cd.SaveChanges();
-            
+
+            Drink updatedCoffee = db.Drink.Find(int.Parse(coffeeKey));
+            db.Drink.Remove(updatedCoffee);
+            db.SaveChanges();
+
             if (!newPrice.Equals(""))
                 updatedCoffee.price = newPrice;
+            if (!newAmount.Equals(""))
+                updatedCoffee.amount = int.Parse(newAmount);
 
-            
-            cd.Coffee.Add(updatedCoffee);
-            cd.SaveChanges();
+            db.Drink.Add(updatedCoffee);
+            db.SaveChanges();
 
 
             return RedirectToAction("Index");
@@ -112,27 +112,31 @@ namespace CoffeeShop.Controllers
             user newUser = new user(fn, email, pass, role);
             usersd.Users.Add(newUser);
             usersd.SaveChanges();
-            //List<user> users = usersd.Users.ToList<user>();
-
-            //List<coffee> coffeList = (new coffeeDal()).Coffee.ToList<coffee>();
-
-            //Dictionary<string, object> dict = new Dictionary<string, object>
-            //{
-            //    { "users", users },
-            //    { "coffee", coffeList }
-            //};
 
 
             return RedirectToAction("Index", "Admin");
         }
-       
-        public ActionResult AddDrinks()
-        {
 
+
+        public ActionResult DeleteDrink()
+        {
+            string Key = null;
+            if (Request.Form.AllKeys.Length != 0)
+                Key = Request.Form.AllKeys[0];
+
+            if (Key == null)
+                return RedirectToAction("Index");
+
+            Drink updatedCoffee = db.Drink.Find(int.Parse(Key));
+            db.Drink.Remove(updatedCoffee);
+            db.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
+
+
+
+
     }
-
-
 }

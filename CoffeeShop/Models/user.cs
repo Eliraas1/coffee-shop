@@ -16,6 +16,8 @@ namespace CoffeeShop.Models
         public string password { get; set; }
         public string role { get; set; }
 
+        public int cb { get; set; } //how much coffee the users bought
+
         public user(string name, string email, string password, string role)
         {
             this.name = name;

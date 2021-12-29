@@ -1,0 +1,66 @@
+﻿@using CoffeeShop.Dal
+@using CoffeeShop.Models
+@{
+    ViewBag.Title = "menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Drink> drinks = (new drinksDal()).Drink.ToList<Drink>();
+}
+
+<h2>menu</h2>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-5 pb-8"> @* start *@
+                <div class="col-md-15">
+                    <form action="AscByPop" method="post">
+                        <div class="row d-md-flex col-15 ">
+                            <div class="input-group">
+                                <button type="submit" class="btn btn-primary btn-outline-primary">sort by popularity</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h3 class="mb-5 heading-pricing ftco-animate">Drinks</h3>
+                    @foreach (Drink d in Model)
+                    {
+                        <div class="pricing-entry d-flex ftco-animate">
+
+                            @if (!d.isAlcohol)
+                            {
+                                <div class="img" style="background-image: url(../../images/menu-@(d.img).jpg);"></div>
+                            }
+                            @if (d.isAlcohol)
+                            {
+                                <div class="img" style="background-image: url(../../images/drink-@(d.img).jpg);"></div>}
+                        <div class="desc pl 10">
+                            <div class="d-flex text align-items-center">
+                                <h3><span>@d.name</span></h3>
+                                <span class="price">@d.price$</span>
+
+                            </div>
+                            @if (d.amount > 0)
+                            {
+                                <div class="d-block">
+                                    <p>Popularity: @d.popular</p>
+                                </div>
+                                <div class="d-block">
+                                    <p>In Stock: @d.amount</p>
+                                </div>
+                                <div class="d-flex align-items-lg-end">
+                                    <button href="#" class="btn btn-primary btn-outline-primary">Add to Cart</button>
+                                </div>
+                            }
+                            @if (d.amount <= 0)
+                            {
+                                <div class="d-block">
+                                    <p style="color:orangered">Out Of Stock!</p>
+                                </div>
+
+                            }
+                        </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

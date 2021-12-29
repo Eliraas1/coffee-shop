@@ -133,15 +133,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\coffeesController.cs" />
+    <Compile Include="Controllers\DrinksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogRegController.cs" />
-    <Compile Include="Dal\coffeeDal.cs" />
+    <Compile Include="Dal\drinksDal.cs" />
     <Compile Include="Dal\usersDal.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\coffee.cs" />
+    <Compile Include="Models\Drink.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\WebForm1.aspx.cs">
@@ -448,6 +448,11 @@
     <Content Include="Views\coffees\Details.cshtml" />
     <Content Include="Views\coffees\Edit.cshtml" />
     <Content Include="Views\coffees\Index.cshtml" />
+    <Content Include="Views\Drinks\Create.cshtml" />
+    <Content Include="Views\Drinks\Delete.cshtml" />
+    <Content Include="Views\Drinks\Details.cshtml" />
+    <Content Include="Views\Drinks\Edit.cshtml" />
+    <Content Include="Views\Drinks\Index.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />
@@ -464,6 +469,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\LogReg\Index.cshtml" />
+    <Content Include="Views\Home\menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
