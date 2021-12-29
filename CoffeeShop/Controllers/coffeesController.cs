@@ -22,7 +22,7 @@ namespace CoffeeShop.Controllers
         }
 
         // GET: coffees/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -47,7 +47,7 @@ namespace CoffeeShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,name,img,price,IsAlcohol")] coffee coffee)
+        public ActionResult Create([Bind(Include = "id,name,img,price,isAlcohol,amount")] coffee coffee)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace CoffeeShop.Controllers
         }
 
         // GET: coffees/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -79,7 +79,7 @@ namespace CoffeeShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,name,img,price,IsAlcohol")] coffee coffee)
+        public ActionResult Edit([Bind(Include = "id,name,img,price,isAlcohol,amount")] coffee coffee)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace CoffeeShop.Controllers
         }
 
         // GET: coffees/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -108,7 +108,7 @@ namespace CoffeeShop.Controllers
         // POST: coffees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int id)
         {
             coffee coffee = db.Coffee.Find(id);
             db.Coffee.Remove(coffee);

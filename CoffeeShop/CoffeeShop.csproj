@@ -443,11 +443,11 @@
     <Content Include="scss\style.scss" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\coffees\Create.cshtml" />
     <Content Include="Views\coffees\Delete.cshtml" />
     <Content Include="Views\coffees\Details.cshtml" />
     <Content Include="Views\coffees\Edit.cshtml" />
     <Content Include="Views\coffees\Index.cshtml" />
-    <Content Include="Views\coffees\Create.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />

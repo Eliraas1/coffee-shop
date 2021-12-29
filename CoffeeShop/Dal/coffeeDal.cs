@@ -15,7 +15,7 @@ namespace CoffeeShop.Dal
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<coffee>().ToTable("coffee");
+            modelBuilder.Entity<coffee>().ToTable("drinks");
         }
     }
 }

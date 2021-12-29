@@ -142,11 +142,11 @@
                                             <div class="col-md-3">
                                                 <div class="menu-entry">
                                                     <form action="EditCoffee" method="post">
-                                                        @if (!c.IsAlcohol)
+                                                        @if (!c.isAlcohol)
                                                         {
                                                         <a href="#" class="img" style="background-image: url(../../images/menu-@(c.img).jpg);"></a>
                                                         }
-                                                        @if(c.IsAlcohol)
+                                                        @if(c.isAlcohol)
                                                             {<a href="#" class="img" style="background-image: url(../../images/drink-@(c.img).jpg);"></a> }
                                                         <div class="text text-center pt-4">
                                                             <h3><a href="#" name="key">@c.name</a></h3>

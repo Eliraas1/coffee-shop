@@ -56,9 +56,9 @@ namespace CoffeeShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,name,img,price,IsAlcohol")] coffee coffee)
+        public ActionResult Create([Bind(Include = "name,img,price,IsAlcohol,amount")] coffee coffee)
         {
-
+            
             if (ModelState.IsValid)
             {
                 coffeeDal db = new coffeeDal();
@@ -81,7 +81,7 @@ namespace CoffeeShop.Controllers
                 return RedirectToAction("Index");
 
             coffeeDal cd = new coffeeDal();
-            coffee updatedCoffee = cd.Coffee.Find(coffeeKey);
+            coffee updatedCoffee = cd.Coffee.Find(int.Parse(coffeeKey));
             cd.Coffee.Remove(updatedCoffee);
             cd.SaveChanges();
             
@@ -133,4 +133,6 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Index");
         }
     }
+
+
 }

@@ -22,7 +22,10 @@
             @Html.DisplayNameFor(model => model.price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsAlcohol)
+            @Html.DisplayNameFor(model => model.isAlcohol)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.amount)
         </th>
         <th></th>
     </tr>
@@ -39,7 +42,10 @@
             @Html.DisplayFor(modelItem => item.price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IsAlcohol)
+            @Html.DisplayFor(modelItem => item.isAlcohol)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.amount)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |

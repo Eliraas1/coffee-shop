@@ -42,12 +42,20 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsAlcohol, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.isAlcohol, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.IsAlcohol)
-                    @Html.ValidationMessageFor(model => model.IsAlcohol, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.isAlcohol)
+                    @Html.ValidationMessageFor(model => model.isAlcohol, "", new { @class = "text-danger" })
                 </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.amount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.amount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.amount, "", new { @class = "text-danger" })
             </div>
         </div>
 

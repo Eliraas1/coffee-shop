@@ -10,13 +10,15 @@ namespace CoffeeShop.Models
     {
 
         [Key]
-        public string id { get; set; }
+        public int id { get; set; }
 
         public string name { get; set; }
 
         public string img { get; set; }
         public string price { get; set; }
 
-        public bool IsAlcohol { get; set; }
+        public bool isAlcohol { get; set; }
+
+        public int amount { get; set; }
     }
 }
