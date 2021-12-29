@@ -133,6 +133,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\coffeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogRegController.cs" />
     <Compile Include="Dal\coffeeDal.cs" />
@@ -441,7 +442,12 @@
     <Content Include="scss\bootstrap\_variables.scss" />
     <Content Include="scss\style.scss" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\EditCoffee.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\coffees\Create.cshtml" />
+    <Content Include="Views\coffees\Delete.cshtml" />
+    <Content Include="Views\coffees\Details.cshtml" />
+    <Content Include="Views\coffees\Edit.cshtml" />
+    <Content Include="Views\coffees\Index.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />

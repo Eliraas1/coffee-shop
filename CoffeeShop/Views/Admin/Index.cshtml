@@ -1,10 +1,17 @@
 ﻿@using CoffeeShop.Models;
-
+@using Microsoft.Ajax.Utilities
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<user> users = new List<user>();
     List<coffee> coffeeLst = new List<coffee>();
+    List<string> roles = new List<string>();
+    roles.Add("admin");
+    roles.Add("customer");
+    roles.Add("barista");
+    string[] a = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+
+
     if (Model != null && Model["users"] != null)
     {
         users = Model["users"];
@@ -14,21 +21,17 @@
         coffeeLst = Model["coffee"];
     }
     bool notFound = false;
-    if (users !=null && users.Count() == 0)
+    if (users != null && users.Count() == 0)
     {
         notFound = true;
     }
 }
 
 
-
-
 <link href="~/Content/css-admin/style.css" rel="stylesheet" />
 <link href="~/Content/css-admin/bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/css-admin/owl.carousel.min.css" rel="stylesheet" />
 <a href="~/Content/css-admin/bootstrap.min.css.map"></a>
-
-<!aria-labelledby="v-pills-1-tab">
 
 <section class="ftco-menu mb-5 pb-5">
     <div class="container">
@@ -37,23 +40,53 @@
                 <div class="col-md-12 nav-link-wrap mb-5">
                     <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <a class="nav-link active" id="v-pills-0-tab" data-toggle="pill" href="#v-pills-0" role="tab" aria-controls="v-pills-0" aria-selected="true">Users</a>
-                        <a class="nav-link" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="false">Main Dish</a>
-                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Drinks</a>
+                        <a class="nav-link" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="false">Edit Coffees</a>
+                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">
+                            @Html.ActionLink("Add Drinks", "Create")
+                        </a>
                         <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Desserts</a>
                     </div>
+                    <!--Add Users ----Search Users---- Show Users-->
                     <div class="tab-content ftco-animate" id="v-pills-tabContent">
                         <div class="tab-pane fade show active" id="v-pills-0" role="tabpanel" aria-labelledby="v-pills-0-tab">
                             <br />
-                            <form action="SearchUser" method="post">
-                                <div class="row d-md-flex col-5 mx-auto">
-                                    <div class="input-group">
-                                        <input id="search" name="searchInput" type="text" class="form-control rounded" placeholder="Search user" aria-label="Search"
-                                               aria-describedby="search-addon" />
-                                        <button type="submit" class="btn btn-primary btn-outline-primary">search</button>
+                            <!--Search Users-->
+                            <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
+                                <form action="SearchUser" method="post">
+                                    <div class="row d-md-flex col-15 ">
+                                        <div class="input-group">
+                                            <input id="search" name="searchInput" type="text" class="form-control rounded" placeholder="Search user" aria-label="Search"
+                                                   aria-describedby="search-addon" />
+                                            <button type="submit" class="btn btn-primary btn-outline-primary">search</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
 
+                            </div>
+                            <div style="width: 60%; margin: auto;">
+                                <!--Add Users-->
+                                <form action="AddUser" method="post">
+                                    <div class="row d-md-flex col-15 ">
+
+                                        <input type="text" class="form-control" placeholder="Full Name" name="fn">
+                                        <input type="email" required="" class="form-control" placeholder="Email" name="email">
+                                        <input type="password" class="form-control" placeholder="Password" name="pass">
+                                        <div class="input-group">
+                                            <select class="form-control" name="role">
+                                                @foreach (string role in roles)
+                                                {
+                                                    <option style="background: black">@role</option>
+                                                }
+                                            </select>
+                                            <p></p>
+                                            <button type="submit" class="btn btn-primary py-3 px-4 ">Add User</button>
+                                        </div>
+                                        <p></p>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <!--Show Users-->
                             @if (!notFound)
                             {
                                 <div class="table-responsive custom-table-responsive">
@@ -97,40 +130,64 @@
                             }
                             else
                             { <h1>no users</h1>}
+
                         </div>
-                            <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
-                                <section class="ftco-section">
-                                    <div class="container">
-                                        <div class="row">
-                                       @foreach (coffee c in coffeeLst) {
+                        <!--Edit  Coffee-->
+                        <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                            <section class="ftco-section">
+                                <div class="container">
+                                    <div class="row">
+                                        @foreach (coffee c in coffeeLst)
+                                        {
                                             <div class="col-md-3">
                                                 <div class="menu-entry">
-                                                        <form action="EditCoffee" method="post">
-                                                            <a href="#" class="img" style="background-image: url(../../images/menu-@(c.img).jpg);"></a>
-                                                            <div class="text text-center pt-4">
-                                                                <h3><a href="#" name="key">@c.name</a></h3>
-                                                                <p class="price"><span>$@c.price</span></p>
-                                                                <input type="text" name="newName" placeholder="enter new name" />
-                                                                <input type="number" step="0.01" name="newPrice" placeholder="enter new price" />
-                                                                <input style="display:none" type="text" name=@c.id />
-                                                                <p></p>
-                                                                <p> <button name="btnSubmit" type="submit" onclick="myFunction()" class="btn btn-primary btn-outline-primary">Edit Product</button> </p>
-                                                            </div>
-                                                        </form>
+                                                    <form action="EditCoffee" method="post">
+                                                        @if (!c.isAlcohol)
+                                                        {
+                                                        <a href="#" class="img" style="background-image: url(../../images/menu-@(c.img).jpg);"></a>
+                                                        }
+                                                        @if(c.isAlcohol)
+                                                            {<a href="#" class="img" style="background-image: url(../../images/drink-@(c.img).jpg);"></a> }
+                                                        <div class="text text-center pt-4">
+                                                            <h3><a href="#" name="key">@c.name</a></h3>
+                                                            <p class="price"><span>$@c.price</span></p>
+                                                            <input type="number" required="" step="0.01" name="newPrice" placeholder="enter new price" />
+                                                            <input style="display:none" type="text" name=@c.id />
+                                                            <p></p>
+                                                            <p> <button name="btnSubmit" type="submit" onclick="myFunction()" class="btn btn-primary btn-outline-primary">Edit Product</button> </p>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         }
-                                            </div>
-                                        </div>
                                     </div>
-                                </section>
-                            </div>
+                                </div>
+
+                            </section>
+                        </div>
+                        <!--Add  Coffee-->
+                        
+                        <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
+                            <section class="ftco-section">
+                                <div class="container">
+                                    <form action="AddDrinks" method="post">
+                                        <p>
+                                            @Html.ActionLink("Create New", "Create")
+                                        </p>
+                                    </form>
+                                </div>
+                            </section>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
+    </div>
+
 </section>
 <script src="~/Scripts/js-admin/popper.min.js"></script>
 <script src="~/Scripts/js-admin/bootstrap.min.js"></script>
 <script src="~/Scripts/js-admin/jquery-3.3.1.min.js"></script>
 <script src="~/Scripts/js-admin/main.js"></script>
+

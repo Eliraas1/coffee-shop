@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Web.Routing;
 using CoffeeShop.Dal;
 using CoffeeShop.Models;
 
@@ -13,8 +14,10 @@ namespace CoffeeShop.Controllers
     public class AdminController : Controller
     {
         // GET: Admin
-        public ActionResult Index(List<user> users = null)
+        public ActionResult Index(List<user> users)
         {
+            if (TempData["users"] != null)
+                users = (List<user>) TempData["users"];
             if(users == null)
                 users = (new UserDal()).Users.ToList<user>();
             
@@ -38,36 +41,50 @@ namespace CoffeeShop.Controllers
             List<user> users = (new UserDal()).Users.ToList<user>();
             users = (from x in userDal.Users where x.name.Contains(searchedValue) select x).ToList<user>();
 
-            Dictionary<string, object> dict = new Dictionary<string, object>
-            {
-                { "users", users }
-            };
+            TempData["users"] = users;
+            return RedirectToAction("Index");
 
-            return View("Index", dict);
-            
         }
 
-        
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: coffees/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "name,img,price,IsAlcohol,amount")] coffee coffee)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                coffeeDal db = new coffeeDal();
+                db.Coffee.Add(coffee);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(coffee);
+        }
 
         public ActionResult EditCoffee()
         {
             string newPrice = Request.Form["newPrice"];
             string coffeeKey = null;
             if (Request.Form.AllKeys.Length != 0)
-                coffeeKey = Request.Form.AllKeys[2];
-
-            string newName = Request.Form["newName"];
+                coffeeKey = Request.Form.AllKeys[1];
 
             if (coffeeKey == null)
-                return View("Index");
+                return RedirectToAction("Index");
 
             coffeeDal cd = new coffeeDal();
-            coffee updatedCoffee = cd.Coffee.Find(coffeeKey);
+            coffee updatedCoffee = cd.Coffee.Find(int.Parse(coffeeKey));
             cd.Coffee.Remove(updatedCoffee);
             cd.SaveChanges();
-            if (!newName.Equals(""))
-                updatedCoffee.name = newName;
-
+            
             if (!newPrice.Equals(""))
                 updatedCoffee.price = newPrice;
 
@@ -75,21 +92,47 @@ namespace CoffeeShop.Controllers
             cd.Coffee.Add(updatedCoffee);
             cd.SaveChanges();
 
-            List<user> users = (new UserDal()).Users.ToList<user>();
 
-            List<coffee> coffeList = (new coffeeDal()).Coffee.ToList<coffee>();
-
-            Dictionary<string, object> dict = new Dictionary<string, object>
-            {
-                { "users", users },
-                { "coffee", coffeList }
-            };
-
-
-            return View("Index",dict);
+            return RedirectToAction("Index");
         }
 
-       
 
+        [HttpPost]
+        public ActionResult AddUser()
+        {
+            UserDal usersd = new UserDal();
+            string fn = Request.Form["fn"];
+            string email = Request.Form["email"];
+            string pass = Request.Form["pass"];
+            string role = Request.Form["role"];
+
+            if (email.Equals(""))
+                return RedirectToAction("Index");
+
+            user newUser = new user(fn, email, pass, role);
+            usersd.Users.Add(newUser);
+            usersd.SaveChanges();
+            //List<user> users = usersd.Users.ToList<user>();
+
+            //List<coffee> coffeList = (new coffeeDal()).Coffee.ToList<coffee>();
+
+            //Dictionary<string, object> dict = new Dictionary<string, object>
+            //{
+            //    { "users", users },
+            //    { "coffee", coffeList }
+            //};
+
+
+            return RedirectToAction("Index", "Admin");
+        }
+       
+        public ActionResult AddDrinks()
+        {
+
+
+            return RedirectToAction("Index");
+        }
     }
+
+
 }
