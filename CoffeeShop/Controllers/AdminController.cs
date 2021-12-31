@@ -16,6 +16,7 @@ namespace CoffeeShop.Controllers
     {
         private drinksDal db = new drinksDal();
         private UserDal udb = new UserDal();
+        private TblDal tdb = new TblDal();
         // GET: Admin
         public ActionResult Index(List<user> users)
         {
@@ -28,6 +29,7 @@ namespace CoffeeShop.Controllers
 
             TempData["users"] = users;
             TempData["drinks"] = drinkList;
+            TempData["tables"] = tdb.tbls.ToList();
             return View();
         }
 
@@ -134,8 +136,21 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult CreateTable()
+        {
+            string numberOfSeats = Request.Form["numberOfSeats"];
+            string insideOutside = Request.Form["insideOutside"];
+            Tbl newTable = new Tbl();
+            newTable.amount = int.Parse(numberOfSeats);
+            bool isIn = true;
+            if (insideOutside.Equals("Outside"))
+                isIn = false;
 
-
+            newTable.isIn = isIn;
+            tdb.tbls.Add(newTable);
+            tdb.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
 
     }

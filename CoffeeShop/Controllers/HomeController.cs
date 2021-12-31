@@ -18,62 +18,113 @@ namespace CoffeeShop.Controllers
             return View();
         }
 
-        public ActionResult Menu(List<Drink> sort = null)
+        public ActionResult SearchItems()
         {
-            if (sort == null)
-                sort = db.Drink.ToList<Drink>();
-
-            return View(sort);
-        }
-        public ActionResult Sort()
-        {
-            string userSelection = Request.Form["sortSelect"];
+            String searchedValue = Request.Form["searchInput"];
             List<Drink> drinks = db.Drink.ToList<Drink>();
+            drinks = (from x in db.Drink where x.name.Contains(searchedValue) select x).ToList<Drink>();
+            TempData["SearchItems"] = drinks;
+            return RedirectToAction("Menu");
 
-            return View("Menu", sortActionHelper(userSelection, drinks));
         }
 
-        //Sort Helpers
-        public List<Drink> sortActionHelper(string select, List<Drink> drink)
+        public ActionResult Menu(string sort)
         {
-            switch(select){
-                case "least-popular": return sortByPopulareAsc(drink);
-                case "most-popular": return sortByPopulareDesc(drink);
-                case "price-asc": return sortByPriceAsc(drink);
-                case "price-desc": return sortByPriceDesc(drink);
-                case "name-asc": return sortByNameAsc(drink);
-                case "name-desc": return sortByNameDesc(drink);
-                case "in-stock": return sortByStock(drink);
-                default: return sortByPopulareAsc(drink);
-            }
+            ViewBag.sort = db.Drink.ToList<Drink>();
+
+            string s = Request.Form["sortSelect"];
+
+            if (TempData["SearchItems"] != null)
+                ViewBag.sort = TempData["SearchItems"];
+            else if (s == null)
+                return View();
+            else if (s.Equals("in-stock"))
+                ViewBag.sort = DescByAmount();
+            else if (s.Equals("name-asc"))
+                ViewBag.sort = AscByName();
+            else if (s.Equals("name-desc"))
+                ViewBag.sort = DescByName();
+            else if (s.Equals("least-popular"))
+                ViewBag.sort = AscByPop();
+            else if (s.Equals("most-popular"))
+                ViewBag.sort = DescByPop();
+            else if (s.Equals("price-asc"))
+                ViewBag.sort = AscByPrice();
+            else if (s.Equals("price-desc"))
+                ViewBag.sort = DescByPrice();
+            return View();
         }
-        public List<Drink> sortByPriceAsc(List<Drink> drinks)
+
+        public List<Drink> AscByAmount()
         {
-            return drinks.OrderBy(drink => drink.price).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.OrderBy(pop => pop.amount).ToList<Drink>();
+            return d;
+
         }
-        public List<Drink> sortByPriceDesc(List<Drink> drinks)
+        public List<Drink> DescByAmount()
         {
-            return drinks.OrderByDescending(drink => drink.price).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.OrderByDescending(pop => pop.amount).ToList<Drink>();
+            return d;
+
         }
-        public List<Drink> sortByPopulareDesc(List<Drink> drinks)
+        public List<Drink> AscByName()
         {
-            return drinks.OrderByDescending(drink => drink.popular).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.OrderBy(pop => pop.name).ToList<Drink>();
+            return d;
+
         }
-        public List<Drink> sortByPopulareAsc(List<Drink> drinks)
+        public List<Drink> DescByName()
         {
-            return drinks.OrderBy(drink => drink.popular).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.OrderByDescending(pop => pop.name).ToList<Drink>();
+            return d;
+
         }
-        public List<Drink> sortByNameAsc(List<Drink> drinks)
+        public List<Drink> AscByPop()
         {
-            return drinks.OrderBy(drink => drink.name).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.AsEnumerable().OrderBy(pop => pop.popular).ToList();
+            return d;
+
         }
-        public List<Drink> sortByNameDesc(List<Drink> drinks)
+        public List<Drink> DescByPop()
         {
-            return drinks.OrderByDescending(drink => drink.name).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.OrderByDescending(pop => pop.price).ToList();
+            return d;
+
         }
-        public List<Drink> sortByStock(List<Drink> drinks)
+        public List<Drink> AscByPrice()
         {
-            return drinks.OrderByDescending(drink => drink.amount).ToList().Where(d=>d.amount>0).ToList();
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.AsEnumerable().OrderBy(pop => float.Parse(pop.price)).ToList();
+            return d;
+
+        }
+        public List<Drink> DescByPrice()
+        {
+
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.AsEnumerable().OrderByDescending(pop => float.Parse(pop.price)).ToList();
+            return d;
+
+        }
+
+
+        public ActionResult BookTable()
+        {
+            
+            return RedirectToAction("Index");
         }
     }
 }

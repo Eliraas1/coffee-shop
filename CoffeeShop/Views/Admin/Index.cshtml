@@ -6,13 +6,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<user> users = new List<user>();
     List<Drink> drinkLst = new List<Drink>();
+    List<Tbl> tableLst = new List<Tbl>();
     List<string> roles = new List<string>();
     roles.Add("admin");
     roles.Add("customer");
     roles.Add("barista");
     string[] alcoholImgIndex = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
     string[] coffeeImgIndex = { "1", "2", "3", "4" };
-    
+
 
 
     if (TempData != null && TempData["users"] != null)
@@ -22,6 +23,10 @@
     if (TempData != null && TempData["drinks"] != null)
     {
         drinkLst = (List < Drink > )TempData["drinks"];
+    }
+    if (TempData != null && TempData["tables"] != null)
+    {
+        tableLst = (List<Tbl>)TempData["tables"];
     }
     bool notFound = false;
     if (users != null && users.Count() == 0)
@@ -46,7 +51,7 @@
                             Create Drink
                             @*@Html.ActionLink("Add Drinks", "Create")*@
                         </a>
-                        <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Desserts</a>
+                        <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Tables</a>
                     </div>
                     <!--Add Users ----Search Users---- Show Users-->
                     <div class="tab-content ftco-animate" id="v-pills-tabContent">
@@ -54,7 +59,7 @@
                             <br />
                             <!--Search Users-->
                             <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
-                                <form action="AscByPop" method="post">
+                                <form action="SearchUser" method="post">
                                     <div class="row d-md-flex col-15 ">
                                         <div class="input-group">
                                             <input id="search" name="searchInput" type="text" class="form-control rounded" placeholder="Search user" aria-label="Search"
@@ -101,6 +106,8 @@
                                                 <th scope="col">Full name</th>
                                                 <th scope="col">email</th>
                                                 <th scope="col">Role</th>
+                                                <th scope="col">Is Vip</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -121,6 +128,17 @@
                                                     <td>
                                                         @u.role
                                                     </td>
+                                                    @if (u.isVip || u.role.Equals("admin") || u.role.Equals("barista"))
+                                                    {
+                                                        <td> Vip</td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>NO</td>
+
+                                                    }
+
                                                 </tr>
                                             }
                                         </tbody>
@@ -129,6 +147,7 @@
                             }
                             else
                             { <h1>no users</h1>}
+
                         </div>
                         <!--Edit  Coffee-->
                         <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
@@ -154,7 +173,7 @@
                                                             <input type="number" required="" min="0" step="1" name="newAmount" placeholder="Stock: @c.amount" />
                                                             <input style="display:none" type="text" name=@c.id />
                                                             <p></p>
-                                                            <p> <button name="btnSubmit" type="submit" onclick="myFunction()" class="btn btn-primary btn-outline-primary">Edit Product</button> </p>
+                                                            <p> <button name="btnSubmit" type="submit" class="btn btn-primary btn-outline-primary">Edit Product</button> </p>
                                                         </div>
                                                     </form>
                                                     <form action="DeleteDrink" method="post">
@@ -166,6 +185,7 @@
                                                 </div>
                                             </div>
                                         }
+
                                     </div>
                                 </div>
                             </section>
@@ -181,7 +201,7 @@
                             <section class="ftco-section">
                                 <div class="container">
                                     <div style="width: 60%; margin: auto;">
-                                        <form action="Create" method="post" >
+                                        <form action="Create" method="post">
                                             <div class="row d-md-flex col-15 ">
                                                 <input required="" type="text" class="form-control" placeholder="Name" name="name">
                                                 <center>
@@ -204,20 +224,80 @@
                                                 <input required="" type="number" min="1" step="0.01" class="form-control" placeholder="Price" name="price">
 
                                                 <input required="" type="number" min="1" step="1" class="form-control" placeholder="Amount" name="amount">
-                                                
+
                                                 @*<label style="color:antiquewhite">    Alcoholic Drink  <input class="checkbox-inline" type="checkbox" value="Alcoholic Drink" id="" name="al"></label>*@
                                                 <wbr />
-                                                
+
                                             </div>
                                             <br />
-                                                <div class="row d-md-flex col-15 "><button type="submit" class="btn btn-primary py-3 px-4 ">Create</button></div>
+                                            <div class="row d-md-flex col-15 "><button type="submit" class="btn btn-primary py-3 px-4 ">Create</button></div>
                                         </form>
-                                        </div>
                                     </div>
-</section>
+                                </div>
+                            </section>
+                        </div>
+
+                        <!--Tables-->
+                        <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
+                            <section class="ftco-section">
+                                <div class="container">
+                                    <div style="width: 50%; margin: auto;">
+                                        <!--Create Table-->>
+                                        <form action="CreateTable" method="post">
+                                            <div class="row d-md-flex col-15 ">
+                                                <input required="" type="number" min="1" step="1" class="form-control" placeholder="Number of seats" name="numberOfSeats">
+                                                <div class="input-group">
+                                                    <select class="form-control" name="insideOutside">
+                                                        <option style="background: black">Inside</option>
+                                                        <option style="background: black">Outside</option>
+                                                    </select>
+                                                    <p></p>
+                                                    <button type="submit" class="btn btn-primary py-3 px-4 ">Add Table</button>
+                                                </div>
+                                                <p></p>
+                                            </div>
+                                        </form>
+                                    </div>
+                                        <!--Display Tables-->>
+                                        <div class="table-responsive custom-table-responsive ">
+                                            <table class="table custom-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Table Number</th>
+                                                        <th scope="col">Number of seats</th>
+                                                        <th scope="col">Inside\Outside</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (Tbl t in tableLst)
+                                                    {
+
+                                                    <tr scope="row">
+                                                        <td>
+                                                            @t.tid
+                                                        </td>
+                                                        <td>
+                                                            @t.amount
+                                                        </td>
+                                                        @if (t.isIn)
+                                                        {
+                                                            <td>Inside </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>Outside </td>
+                                                        }
+
+                                                    </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                </div>
+                                </section>
+
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

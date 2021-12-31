@@ -39,6 +39,11 @@ namespace CoffeeShop
                defaults: new { controller = "Admin", action = "SearchUser", id = UrlParameter.Optional }
            );
             routes.MapRoute(
+               name: "SearchItems",
+               url: "SearchItems",
+               defaults: new { controller = "Home", action = "SearchItems", id = UrlParameter.Optional }
+           );
+            routes.MapRoute(
               name: "edit",
               url: "EditCoffee",
               defaults: new { controller = "Admin", action = "EditCoffee", id = UrlParameter.Optional }
@@ -69,11 +74,13 @@ namespace CoffeeShop
               url: "Menu",
               defaults: new { controller = "Home", action = "Menu", id = UrlParameter.Optional }
           );
+
             routes.MapRoute(
-              name: "sortByPopolar",
-              url: "Menu",
-              defaults: new { controller = "Home", action = "AscByPop", id = UrlParameter.Optional }
-            );
+              name: "booking",
+              url: "Home",
+              defaults: new { controller = "Home", action = "BookTable", id = UrlParameter.Optional }
+          );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

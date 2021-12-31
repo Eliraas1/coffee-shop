@@ -16,7 +16,11 @@ namespace CoffeeShop.Models
         public string password { get; set; }
         public string role { get; set; }
 
-        public int cb { get; set; } //how much coffee the users bought
+        public int coffeBought { get; set; } //how much coffee the users bought
+
+        public int age { get; set; }
+
+        public bool isVip { get; set; }
 
         public user(string name, string email, string password, string role)
         {
@@ -28,7 +32,7 @@ namespace CoffeeShop.Models
 
         public user()
         {
-            
+            isVip = false;
         }
     }
 }
