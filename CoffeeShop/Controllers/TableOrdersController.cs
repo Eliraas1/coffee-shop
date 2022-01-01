@@ -1,114 +1,117 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using CoffeeShop.Dal;
 using CoffeeShop.Models;
 
 namespace CoffeeShop.Controllers
 {
-    public class DrinksController : Controller
+    public class TableOrdersController : Controller
     {
-        private drinksDal db = new drinksDal();
+        private TableOrderDal db = new TableOrderDal();
 
-        // GET: Drinks
+        // GET: TableOrders
         public ActionResult Index()
         {
-            return View(db.Drink.ToList());
+            return View(db.TableOrder.ToList());
         }
 
-        // GET: Drinks/Details/5
-        public ActionResult Details(int? id)
+        // GET: TableOrders/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Drink drink = db.Drink.Find(id);
-            if (drink == null)
+            TableOrder tableOrder = db.TableOrder.Find(id);
+            if (tableOrder == null)
             {
                 return HttpNotFound();
             }
-            return View(drink);
+            return View(tableOrder);
         }
 
-        // GET: Drinks/Create
+        // GET: TableOrders/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Drinks/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // POST: TableOrders/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,name,img,price,isAlcohol,amount")] Drink drink)
+        public ActionResult Create([Bind(Include = "Date,Uid,Tid,NumberOfSeats")] TableOrder tableOrder)
         {
             if (ModelState.IsValid)
             {
-                db.Drink.Add(drink);
+                db.TableOrder.Add(tableOrder);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(drink);
+            return View(tableOrder);
         }
 
-        // GET: Drinks/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: TableOrders/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Drink drink = db.Drink.Find(id);
-            if (drink == null)
+            TableOrder tableOrder = db.TableOrder.Find(id);
+            if (tableOrder == null)
             {
                 return HttpNotFound();
             }
-            return View(drink);
+            return View(tableOrder);
         }
 
-        // POST: Drinks/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // POST: TableOrders/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,name,img,price,isAlcohol,amount")] Drink drink)
+        public ActionResult Edit([Bind(Include = "Date,Uid,Tid,NumberOfSeats")] TableOrder tableOrder)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(drink).State = EntityState.Modified;
+                db.Entry(tableOrder).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(drink);
+            return View(tableOrder);
         }
 
-        // GET: Drinks/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: TableOrders/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Drink drink = db.Drink.Find(id);
-            if (drink == null)
+            TableOrder tableOrder = db.TableOrder.Find(id);
+            if (tableOrder == null)
             {
                 return HttpNotFound();
             }
-            return View(drink);
+            return View(tableOrder);
         }
 
-        // POST: Drinks/Delete/5
+        // POST: TableOrders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            Drink drink = db.Drink.Find(id);
-            db.Drink.Remove(drink);
+            TableOrder tableOrder = db.TableOrder.Find(id);
+            db.TableOrder.Remove(tableOrder);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

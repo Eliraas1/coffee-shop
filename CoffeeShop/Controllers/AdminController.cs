@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Web.Routing;
 using CoffeeShop.Dal;
 using CoffeeShop.Models;
 using System.Text.RegularExpressions;
@@ -107,11 +103,19 @@ namespace CoffeeShop.Controllers
             string email = Request.Form["email"];
             string pass = Request.Form["pass"];
             string role = Request.Form["role"];
+            int age = int.Parse(Request.Form["age"]);
+            string vip = Request.Form["Vip"];
+            bool isVip = false;
+            if (vip != null)
+                isVip = true;
 
-            if (email.Equals(""))
-                return RedirectToAction("Index");
+            if (usersd.Users.Find(email) != null)
+            {
+                Response.Write("<script>alert('Email already exist!')</script>");
+                return View("Index");
+            }
 
-            user newUser = new user(fn, email, pass, role);
+            user newUser = new user(fn, email, pass, role,age,isVip);
             usersd.Users.Add(newUser);
             usersd.SaveChanges();
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
+﻿using System.Data.SqlClient;
 using System.Web.Mvc;
 using System.Configuration;
 
@@ -55,14 +51,22 @@ namespace CoffeeShop.Controllers
             string role = "customer";
             var email = Request.Form["email"];
             var pass = Request.Form["pass"];
+            int age = int.Parse(Request.Form["age"]);
+            string vip = Request.Form["VipOrStantard"];
+            bool isVip = false;
+            if (vip.Equals("Vip"))
+                isVip = true;
+
             SqlConnection con = new SqlConnection("Data Source=DESKTOP-U2T54MF;database=CoffeProj;Integrated Security=True");
             SqlCommand cmd = new SqlCommand(@"INSERT INTO [dbo].[users]
            ([name]
            ,[email]
            ,[password]
-           ,[role])
+           ,[role]
+           ,[age]
+            ,[isVip])
             VALUES
-           ('" + name + "' ,'" + email + "' ,'" + pass + "','" + role + "')", con);
+           ('" + name + "' ,'" + email + "' ,'" + pass + "','" + role + "','" + age + "','" + isVip + "')", con);
 
             con.Open();
             cmd.ExecuteNonQuery();

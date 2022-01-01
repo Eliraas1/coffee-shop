@@ -74,8 +74,13 @@
                                 <form action="AddUser" method="post">
                                     <div class="row d-md-flex col-15 ">
                                         <input required="" type="text" class="form-control" placeholder="Full Name" name="fn">
-                                        <input required="" type="email" required="" class="form-control" placeholder="Email" name="email">
+                                        <input required="" type="email" class="form-control" placeholder="Email" name="email">
                                         <input required="" type="password" class="form-control" placeholder="Password" name="pass">
+                                        <input type="number" step="1" class="form-control" placeholder="Age" name="age">
+                                        <label class="form-control">
+                                            <input type="checkbox" class="js-check" name="Vip">vip</input>
+                                        </label>
+
                                         <div class="input-group">
                                             <select class="form-control" name="role">
                                                 @foreach (string role in roles)
@@ -84,7 +89,7 @@
                                                 }
                                             </select>
                                             <p></p>
-                                            <button type="submit" class="btn btn-primary py-3 px-4 ">Add User</button>
+                                            <button type="submit" class="btn btn-primary py-3 px-4 " >Add User</button>
                                         </div>
                                         <p></p>
                                     </div>
@@ -128,14 +133,14 @@
                                                     <td>
                                                         @u.role
                                                     </td>
-                                                    @if (u.isVip || u.role.Equals("admin") || u.role.Equals("barista"))
+                                                    @if (u.isVip)
                                                     {
                                                         <td> Vip</td>
 
                                                     }
                                                     else
                                                     {
-                                                        <td>NO</td>
+                                                        <td>No</td>
 
                                                     }
 
@@ -271,14 +276,12 @@
                                                 <tbody>
                                                     @foreach (Tbl t in tableLst)
                                                     {
-
+                                                        
                                                     <tr scope="row">
-                                                        <td>
-                                                            @t.tid
-                                                        </td>
-                                                        <td>
-                                                            @t.amount
-                                                        </td>
+                                                        <td>@t.tid</td>
+                                                         
+                                                        <td>@t.amount</td>
+                                                        
                                                         @if (t.isIn)
                                                         {
                                                             <td>Inside </td>

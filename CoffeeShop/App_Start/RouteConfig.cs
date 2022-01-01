@@ -77,7 +77,7 @@ namespace CoffeeShop
 
             routes.MapRoute(
               name: "booking",
-              url: "Home",
+              url: "Index",
               defaults: new { controller = "Home", action = "BookTable", id = UrlParameter.Optional }
           );
 

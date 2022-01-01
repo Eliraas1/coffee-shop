@@ -74,12 +74,13 @@
                     </div>
                 </div>
             </div>
+            <!--Book table-->
             <div class="book p-4">
                 <h3>Book a Table</h3>
-                <form action="BookTable" class="appointment-form">
+                <form  action="BookTable" class="appointment-form" method="post">
                     <div class="d-md-flex">
                         <div class="form-group">
-                            <input type="number" step="1" class="form-control" placeholder="Number of seats">
+                            <input type="number" step="1" max ="22" class="form-control" required placeholder="Number of seats" name="numberOfSeats"/>
                         </div>
                         <div class="form-group ml-md-4">
                             <div class="input-group">
@@ -94,13 +95,13 @@
                         <div class="form-group">
                             <div class="input-wrap">
                                 <div class="icon"><span class="ion-md-calendar"></span></div>
-                                <input type="text" class="form-control appointment_date" placeholder="Date">
+                                <input type="text" required class="form-control appointment_date" placeholder="Date" name="date"/>
                             </div>
                         </div>
                         <div class="form-group ml-md-4">
                             <div class="input-wrap">
                                 <div class="icon"><span class="ion-ios-clock"></span></div>
-                                <input type="text" class="form-control appointment_time" placeholder="Time">
+                                <input type="text" class="form-control appointment_time" required placeholder="Time" name="time"/>
                             </div>
                         </div>
                     </div>
@@ -109,7 +110,7 @@
                             <textarea name="" id="" cols="30" rows="2" class="form-control" placeholder="Message"></textarea>
                         </div>
                         <div class="form-group ml-md-4">
-                            <input type="submit" value="Appointment" class="btn btn-white py-3 px-4">
+                            <input type="submit" value="Appointment" class="btn btn-white py-3 px-4"/>
                         </div>
                     </div>
                 </form>
@@ -466,22 +467,23 @@
     <div class="container">
 
         <div class="row no-gutters d-md-flex align-items-center">
+            <!--Book table-->
 
             <div class="col-md-6 appointment ftco-animate">
                 <h3 class="mb-3">Book a Table</h3>
                 <form action="BookTable" class="appointment-form">
                     <div class="d-md-flex">
-                            <div class="form-group">
-                                <input type="number" step="1" class="form-control" placeholder="Number of seats">
+                        <div class="form-group">
+                            <input type="number" step="1" class="form-control" placeholder="Number of seats">
+                        </div>
+                        <div class="form-group ml-md-4">
+                            <div class="input-group">
+                                <select class="form-control" name="insideOutside">
+                                    <option style="background: black">Inside</option>
+                                    <option style="background: black">Outside</option>
+                                </select>
                             </div>
-                            <div class="form-group ml-md-4">
-                                <div class="input-group">
-                                    <select class="form-control" name="insideOutside">
-                                        <option style="background: black">Inside</option>
-                                        <option style="background: black">Outside</option>
-                                    </select>
-                                </div>
-                            </div>
+                        </div>
                     </div>
                     <div class="d-md-flex">
                         <div class="form-group">

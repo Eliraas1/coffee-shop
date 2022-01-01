@@ -136,7 +136,9 @@
     <Compile Include="Controllers\DrinksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogRegController.cs" />
+    <Compile Include="Controllers\TableOrdersController.cs" />
     <Compile Include="Dal\drinksDal.cs" />
+    <Compile Include="Dal\TableOrderDal.cs" />
     <Compile Include="Dal\TblDal.cs" />
     <Compile Include="Dal\usersDal.cs" />
     <Compile Include="Global.asax.cs">
@@ -146,8 +148,29 @@
     <Compile Include="Migrations\202112302140266_tbl1.Designer.cs">
       <DependentUpon>202112302140266_tbl1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112312015443_orderAdd2.cs" />
+    <Compile Include="Migrations\202112312015443_orderAdd2.Designer.cs">
+      <DependentUpon>202112312015443_orderAdd2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201010036000_orderAdd21.cs" />
+    <Compile Include="Migrations\202201010036000_orderAdd21.Designer.cs">
+      <DependentUpon>202201010036000_orderAdd21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201010040453_orderAdd22.cs" />
+    <Compile Include="Migrations\202201010040453_orderAdd22.Designer.cs">
+      <DependentUpon>202201010040453_orderAdd22.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201010041521_orderAdd23.cs" />
+    <Compile Include="Migrations\202201010041521_orderAdd23.Designer.cs">
+      <DependentUpon>202201010041521_orderAdd23.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202201010047241_orderAdd3.cs" />
+    <Compile Include="Migrations\202201010047241_orderAdd3.Designer.cs">
+      <DependentUpon>202201010047241_orderAdd3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Drink.cs" />
+    <Compile Include="Models\TableOrder.cs" />
     <Compile Include="Models\Tbl.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -476,6 +499,11 @@
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\LogReg\Index.cshtml" />
     <Content Include="Views\Home\menu.cshtml" />
+    <Content Include="Views\TableOrders\Create.cshtml" />
+    <Content Include="Views\TableOrders\Delete.cshtml" />
+    <Content Include="Views\TableOrders\Details.cshtml" />
+    <Content Include="Views\TableOrders\Edit.cshtml" />
+    <Content Include="Views\TableOrders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -496,6 +524,21 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202112302140266_tbl1.resx">
       <DependentUpon>202112302140266_tbl1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112312015443_orderAdd2.resx">
+      <DependentUpon>202112312015443_orderAdd2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201010036000_orderAdd21.resx">
+      <DependentUpon>202201010036000_orderAdd21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201010040453_orderAdd22.resx">
+      <DependentUpon>202201010040453_orderAdd22.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201010041521_orderAdd23.resx">
+      <DependentUpon>202201010041521_orderAdd23.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202201010047241_orderAdd3.resx">
+      <DependentUpon>202201010047241_orderAdd3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
