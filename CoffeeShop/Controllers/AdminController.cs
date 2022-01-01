@@ -111,7 +111,7 @@ namespace CoffeeShop.Controllers
 
             if (usersd.Users.Find(email) != null)
             {
-                Response.Write("<script>alert('Email already exist!')</script>");
+                Response.Write("<script>alert('Email already exist! Choose another email.')</script>");
                 return View("Index");
             }
 

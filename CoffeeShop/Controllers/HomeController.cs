@@ -59,6 +59,7 @@ namespace CoffeeShop.Controllers
             return View();
         }
 
+        /***********************sorting menu helper functions************************/
         public List<Drink> AscByAmount()
         {
 
@@ -123,14 +124,16 @@ namespace CoffeeShop.Controllers
             return d;
 
         }
+        /**************************************************************************/
 
+        /***********************booking table and  helper functions************************/
         [HttpPost]
         public ActionResult BookTable()
         {
             string dateRequest = Request.Form["date"];
             string time = Request.Form["time"];
-            string dateParsedToString = dateRequest +' '+ time;
-            string date = DateTime.Parse(dateParsedToString).ToString("dd/MM/yyyy HH:mm tt");
+            string dateParsedToString = fixDate(dateRequest) +' '+ time;
+            string date = DateTime.Parse(dateParsedToString).ToString("dd/MM/yyyy HH:mm");
 
             string inOut = Request.Form["insideOutside"];
             bool isIn = false;
@@ -143,12 +146,32 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Index");
         }
 
+        public string fixDate(string date)
+        {
+            string[] seperateDate = date.Split('/');
+            if (seperateDate[0].Count() == 1)
+                seperateDate[0] = '0' + seperateDate[0];
+            if (seperateDate[1].Count() == 1)
+                seperateDate[1] = '0' + seperateDate[1];
+
+            //swap mm/dd to dd/mm
+            string temp = seperateDate[0];
+            seperateDate[0] = seperateDate[1];
+            seperateDate[1] = temp;
+
+            return String.Join("/", seperateDate);
+        }
+
         public void BookOrderTable(string date, int tid,string numberOfSeats)
         {
-            
-            string email = Session["email"].ToString();
-            tableOrderDB.TableOrder.Add(new TableOrder(date, email, tid, int.Parse(numberOfSeats)));
-            tableDB.SaveChanges();
+            //check if user connected, if not its a guest and have a name field in form
+            string name = null;
+            if (Session["email"] == null)
+                name = "Guest " + Request.Form["Name"] ;
+
+            TableOrder tableOrder = new TableOrder(date, name, tid, int.Parse(numberOfSeats));
+            tableOrderDB.TableOrder.Add(tableOrder);
+            tableOrderDB.SaveChanges();
         }
 
         public bool CheckIfAvailable(string date, int tid)
@@ -157,7 +180,7 @@ namespace CoffeeShop.Controllers
             SqlConnection con = new SqlConnection(strcon);
             if (con.State == System.Data.ConnectionState.Closed)
                 con.Open();
-            SqlCommand cmd = new SqlCommand("select * from users where date='" + date + "' AND tid='" + tid + "'", con);
+            SqlCommand cmd = new SqlCommand("select * from TableOrder where date='" + date + "' AND tid='" + tid + "'", con);
             SqlDataReader dr = cmd.ExecuteReader();
             if (dr.HasRows)
             {
@@ -168,7 +191,7 @@ namespace CoffeeShop.Controllers
             
         }
 
-        public void CheckAvailableAndBookOrder(string numberOfSeats, bool isIn, string date)
+        public void CheckAvailableAndBookOrder(string numberOfSeats, bool isIn, string date,string name=null)
         {
             List<Tbl> tableList = tableDB.tbls.AsEnumerable().Where(tb => (tb.amount >= int.Parse(numberOfSeats))).ToList();
             if (tableList.Count() == 0)
@@ -182,20 +205,12 @@ namespace CoffeeShop.Controllers
             //check if table already taken
             foreach (Tbl t in tl)
             {
-                if (!CheckIfAvailable(date, t.tid))
-                    continue;
-
-                BookOrderTable(date, t.tid, numberOfSeats);
+                if (CheckIfAvailable(date, t.tid)) { 
+                    BookOrderTable(date, t.tid, numberOfSeats);
+                    return;
+                }
             }
         }
+        /**************************************************************************/
     }
 }
-/*       
-public String Date { get; set; } /*DateTime.Now.ToString("dd/MM/yyyy HH:mm")	29/05/2015 05:50
-
-public int Uid { get; set; }
-
-public int Tid { get; set; }
-
-public int NumberOfSeats { get; set; }
-*/
