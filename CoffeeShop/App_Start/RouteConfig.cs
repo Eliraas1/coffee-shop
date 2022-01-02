@@ -74,6 +74,18 @@ namespace CoffeeShop
               url: "Menu",
               defaults: new { controller = "Home", action = "Menu", id = UrlParameter.Optional }
           );
+
+            routes.MapRoute(
+              name: "booking",
+              url: "Index",
+              defaults: new { controller = "Home", action = "BookTable", id = UrlParameter.Optional }
+          );
+            routes.MapRoute(
+              name: "cart",
+              url: "Cart",
+              defaults: new { controller = "Home", action = "Cart", id = UrlParameter.Optional }
+          );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

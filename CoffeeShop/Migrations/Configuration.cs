@@ -5,14 +5,14 @@ namespace CoffeeShop.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<CoffeeShop.Dal.UserDal>
+    internal sealed class Configuration : DbMigrationsConfiguration<CoffeeShop.Dal.TableOrderDal>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(CoffeeShop.Dal.UserDal context)
+        protected override void Seed(CoffeeShop.Dal.TableOrderDal context)
         {
             //  This method will be called after migrating to the latest version.
 

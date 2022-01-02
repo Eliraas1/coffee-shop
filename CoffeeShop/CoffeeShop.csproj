@@ -136,34 +136,21 @@
     <Compile Include="Controllers\DrinksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogRegController.cs" />
+    <Compile Include="Controllers\TableOrdersController.cs" />
     <Compile Include="Dal\drinksDal.cs" />
+    <Compile Include="Dal\TableOrderDal.cs" />
     <Compile Include="Dal\TblDal.cs" />
     <Compile Include="Dal\usersDal.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202112301555558_db.cs" />
-    <Compile Include="Migrations\202112301555558_db.Designer.cs">
-      <DependentUpon>202112301555558_db.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202112301718257_db1.cs" />
-    <Compile Include="Migrations\202112301718257_db1.Designer.cs">
-      <DependentUpon>202112301718257_db1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202112301746201_db2.cs" />
-    <Compile Include="Migrations\202112301746201_db2.Designer.cs">
-      <DependentUpon>202112301746201_db2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202112301813387_db3.cs" />
-    <Compile Include="Migrations\202112301813387_db3.Designer.cs">
-      <DependentUpon>202112301813387_db3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202112301847399_db5.cs" />
-    <Compile Include="Migrations\202112301847399_db5.Designer.cs">
-      <DependentUpon>202112301847399_db5.cs</DependentUpon>
+    <Compile Include="Migrations\202201012145210_db.cs" />
+    <Compile Include="Migrations\202201012145210_db.Designer.cs">
+      <DependentUpon>202201012145210_db.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Drink.cs" />
+    <Compile Include="Models\TableOrder.cs" />
     <Compile Include="Models\Tbl.cs" />
     <Compile Include="Models\user.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -265,6 +252,8 @@
     <Content Include="images\person_2.jpg" />
     <Content Include="images\person_3.jpg" />
     <Content Include="images\person_4.jpg" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\js-admin\bootstrap.min.js" />
     <Content Include="Scripts\js-admin\jquery-3.3.1.min.js" />
     <Content Include="Scripts\js-admin\main.js" />
@@ -464,12 +453,16 @@
     <Content Include="scss\bootstrap\_utilities.scss" />
     <Content Include="scss\bootstrap\_variables.scss" />
     <Content Include="scss\style.scss" />
-    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Index_backup.cshtml" />
     <Content Include="Views\Drinks\Create.cshtml" />
     <Content Include="Views\Drinks\Delete.cshtml" />
     <Content Include="Views\Drinks\Details.cshtml" />
     <Content Include="Views\Drinks\Edit.cshtml" />
     <Content Include="Views\Drinks\Index.cshtml" />
+    <Content Include="Scripts\db.php" />
+    <Content Include="Views\Admin\search.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Home\Cart.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />
@@ -483,10 +476,16 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\ProdCount.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\LogReg\Index.cshtml" />
     <Content Include="Views\Home\menu.cshtml" />
+    <Content Include="Views\TableOrders\Create.cshtml" />
+    <Content Include="Views\TableOrders\Delete.cshtml" />
+    <Content Include="Views\TableOrders\Details.cshtml" />
+    <Content Include="Views\TableOrders\Edit.cshtml" />
+    <Content Include="Views\TableOrders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -505,20 +504,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202112301555558_db.resx">
-      <DependentUpon>202112301555558_db.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202112301718257_db1.resx">
-      <DependentUpon>202112301718257_db1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202112301746201_db2.resx">
-      <DependentUpon>202112301746201_db2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202112301813387_db3.resx">
-      <DependentUpon>202112301813387_db3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202112301847399_db5.resx">
-      <DependentUpon>202112301847399_db5.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202201012145210_db.resx">
+      <DependentUpon>202201012145210_db.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

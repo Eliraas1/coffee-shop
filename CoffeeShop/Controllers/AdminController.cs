@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.SqlClient;
-using System.Configuration;
-using System.Web.Routing;
 using CoffeeShop.Dal;
 using CoffeeShop.Models;
 using System.Text.RegularExpressions;
@@ -16,6 +12,7 @@ namespace CoffeeShop.Controllers
     {
         private drinksDal db = new drinksDal();
         private UserDal udb = new UserDal();
+        private TblDal tdb = new TblDal();
         // GET: Admin
         public ActionResult Index(List<user> users)
         {
@@ -28,6 +25,7 @@ namespace CoffeeShop.Controllers
 
             TempData["users"] = users;
             TempData["drinks"] = drinkList;
+            TempData["tables"] = tdb.tbls.ToList();
             return View();
         }
 
@@ -41,7 +39,7 @@ namespace CoffeeShop.Controllers
             users = (from x in userDal.Users where x.name.Contains(searchedValue) select x).ToList<user>();
 
             TempData["users"] = users;
-            return RedirectToAction("Index");
+            return PartialView("search",users);
 
         }
 
@@ -105,11 +103,19 @@ namespace CoffeeShop.Controllers
             string email = Request.Form["email"];
             string pass = Request.Form["pass"];
             string role = Request.Form["role"];
+            int age = int.Parse(Request.Form["age"]);
+            string vip = Request.Form["Vip"];
+            bool isVip = false;
+            if (vip != null)
+                isVip = true;
 
-            if (email.Equals(""))
-                return RedirectToAction("Index");
+            if (usersd.Users.Find(email) != null)
+            {
+                Response.Write("<script>alert('Email already exist! Choose another email.')</script>");
+                return View("Index");
+            }
 
-            user newUser = new user(fn, email, pass, role);
+            user newUser = new user(fn, email, pass, role, age, isVip);
             usersd.Users.Add(newUser);
             usersd.SaveChanges();
 
@@ -134,8 +140,21 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult CreateTable()
+        {
+            string numberOfSeats = Request.Form["numberOfSeats"];
+            string insideOutside = Request.Form["insideOutside"];
+            Tbl newTable = new Tbl();
+            newTable.amount = int.Parse(numberOfSeats);
+            bool isIn = true;
+            if (insideOutside.Equals("Outside"))
+                isIn = false;
 
-
+            newTable.isIn = isIn;
+            tdb.tbls.Add(newTable);
+            tdb.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
 
     }

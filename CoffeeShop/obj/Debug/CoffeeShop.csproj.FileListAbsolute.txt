@@ -331,7 +331,3 @@ C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.pdb
 C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.csprojAssemblyReference.cache
 C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db.resources
 C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.csproj.GenerateResource.cache
-C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db1.resources
-C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db2.resources
-C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db3.resources
-C:\Users\attia\Desktop\mvc\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db5.resources

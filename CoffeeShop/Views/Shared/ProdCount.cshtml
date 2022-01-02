@@ -1,0 +1,16 @@
+﻿@model int
+
+<li class="nav-item cart navbar-nav" id="unrefresh">
+    
+    <a class="nav-link">
+        <span class="icon icon-shopping_cart"></span>
+        <span class="bag d-flex justify-content-center align-items-center">
+            <small>
+                @Html.ActionLink(Model.ToString(),"Cart")
+            </small>
+        </span>
+    </a>
+    
+
+</li>
+

@@ -49,19 +49,28 @@
                                 </div>
                             </div>
                             <div class="form sign-up">
-                                <h2>Create your Account</h2>
                                 <form action="Reg" method="post">
+                                    <label>
+                                        <select name="VipOrStantard">
+                                            <option>Standard</option>
+                                            <option>Vip</option>
+                                        </select>
+                                    </label>
                                     <label>
                                         <span>Name</span>
                                         <input type="text" name="name" required />
                                     </label>
                                     <label>
                                         <span>Email</span>
-                                        <input type="email"name="email" required />
+                                        <input type="email" name="email" required />
+                                    </label>
+                                    <label>
+                                        <span>age</span>
+                                        <input type="number" step="1" name="age" required />
                                     </label>
                                     <label>
                                         <span>Password</span>
-                                        <input type="password" name="pass" required/>
+                                        <input type="password" name="pass" required />
                                     </label>
                                     <button type="submit" class="submit">Sign Up</button>
                                 </form>

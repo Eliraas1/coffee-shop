@@ -1,7 +1,4 @@
-﻿@model CoffeeShop.Models.Drink
-@using CoffeeShop.Models;
-@using Microsoft.Ajax.Utilities
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     AjaxOptions ajaxOpt = new AjaxOptions
@@ -10,11 +7,19 @@
         InsertionMode = InsertionMode.Replace,
         UpdateTargetId = "unrefresh"
     };
+}
+
+
+
+@using CoffeeShop.Models;
+@using Microsoft.Ajax.Utilities
+@model AjaxOptions
+@{
 
     List<user> users = new List<user>();
     List<Drink> drinkLst = new List<Drink>();
-    List<Tbl> tableLst = new List<Tbl>();
     List<string> roles = new List<string>();
+    List<Tbl> tbls = new CoffeeShop.Dal.TblDal().tbls.ToList<Tbl>();
     roles.Add("admin");
     roles.Add("customer");
     roles.Add("barista");
@@ -30,10 +35,6 @@
     if (TempData != null && TempData["drinks"] != null)
     {
         drinkLst = (List<Drink>)TempData["drinks"];
-    }
-    if (TempData != null && TempData["tables"] != null)
-    {
-        tableLst = (List<Tbl>)TempData["tables"];
     }
     bool notFound = false;
     if (users != null && users.Count() == 0)
@@ -58,7 +59,7 @@
                             Create Drink
                             @*@Html.ActionLink("Add Drinks", "Create")*@
                         </a>
-                        <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Tables</a>
+                        <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Desserts</a>
                     </div>
                     <!--Add Users ----Search Users---- Show Users-->
                     <div class="tab-content ftco-animate" id="v-pills-tabContent">
@@ -66,6 +67,7 @@
                             <br />
                             <!--Search Users-->
                             <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
+                                @*<form action="SearchUser" method="post">*@
                                 @using (Ajax.BeginForm("SearchUser", "Admin", ajaxOpt))
                                 {
                                     <div class="row d-md-flex col-15 ">
@@ -76,6 +78,7 @@
                                         </div>
                                     </div>
                                 }
+                                @*</form>*@
                             </div>
                             <div style="width: 60%; margin: auto;">
                                 <!--Add Users-->
@@ -84,11 +87,6 @@
                                         <input required="" type="text" class="form-control" placeholder="Full Name" name="fn">
                                         <input required="" type="email" class="form-control" placeholder="Email" name="email">
                                         <input required="" type="password" class="form-control" placeholder="Password" name="pass">
-                                        <input type="number" step="1" class="form-control" placeholder="Age" name="age">
-                                        <label class="form-control">
-                                            <input type="checkbox" class="js-check" name="Vip">vip</input>
-                                        </label>
-
                                         <div class="input-group">
                                             <select class="form-control" name="role">
                                                 @foreach (string role in roles)
@@ -106,6 +104,8 @@
                             <div id="unrefresh">
                                 @Html.Partial("/Views/Admin/search.cshtml", users)
                             </div>
+                            
+
                         </div>
                         <!--Edit  Coffee-->
                         <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
@@ -194,64 +194,50 @@
                                 </div>
                             </section>
                         </div>
-
-                        <!--Tables-->
                         <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
                             <section class="ftco-section">
                                 <div class="container">
-                                    <div style="width: 50%; margin: auto;">
-                                        <!--Create Table-->>
-                                        <form action="CreateTable" method="post">
-                                            <div class="row d-md-flex col-15 ">
-                                                <input required="" type="number" min="1" step="1" class="form-control" placeholder="Number of seats" name="numberOfSeats">
-                                                <div class="input-group">
-                                                    <select class="form-control" name="insideOutside">
-                                                        <option style="background: black">Inside</option>
-                                                        <option style="background: black">Outside</option>
-                                                    </select>
-                                                    <p></p>
-                                                    <button type="submit" class="btn btn-primary py-3 px-4 ">Add Table</button>
-                                                </div>
-                                                <p></p>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--Display Tables-->>
-                                    <div class="table-responsive custom-table-responsive ">
+
+                                    <div class="table-responsive custom-table-responsive">
                                         <table class="table custom-table">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">Table Number</th>
-                                                    <th scope="col">Number of seats</th>
-                                                    <th scope="col">Inside\Outside</th>
+                                                    <th scope="col">
+                                                        <label class="control control--checkbox">
+                                                            <input type="checkbox" class="js-check-all" />
+                                                            <div class="control__indicator"></div>
+                                                        </label>
+                                                    </th>
+                                                    <th scope="col">Full name</th>
+                                                    <th scope="col">email</th>
+                                                    <th scope="col">Role</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (Tbl t in tableLst)
+                                                @foreach (Tbl t in tbls)
                                                 {
 
                                                     <tr scope="row">
-                                                        <td>@t.tid</td>
-
-                                                        <td>@t.amount</td>
-
-                                                        @if (t.isIn)
-                                                        {
-                                                            <td>Inside </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>Outside </td>
-                                                        }
-
+                                                        <th scope="row">
+                                                            <label class="control control--checkbox">
+                                                                <input type="checkbox" />
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </th>
+                                                        <td>
+                                                            @t.tid
+                                                        </td>
+                                                        <td><a href="#">@t.amount </a></td>
+                                                        <td></td>
                                                     </tr>
                                                 }
                                             </tbody>
                                         </table>
                                     </div>
+
+
                                 </div>
                             </section>
-
                         </div>
                     </div>
                 </div>
