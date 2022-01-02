@@ -4,6 +4,13 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    AjaxOptions ajaxOpt = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "unrefresh"
+    };
+
     List<user> users = new List<user>();
     List<Drink> drinkLst = new List<Drink>();
     List<Tbl> tableLst = new List<Tbl>();
@@ -22,7 +29,7 @@
     }
     if (TempData != null && TempData["drinks"] != null)
     {
-        drinkLst = (List < Drink > )TempData["drinks"];
+        drinkLst = (List<Drink>)TempData["drinks"];
     }
     if (TempData != null && TempData["tables"] != null)
     {
@@ -33,7 +40,7 @@
     {
         notFound = true;
     }
-    }
+}
 
 <link href="~/Content/css-admin/style.css" rel="stylesheet" />
 <link href="~/Content/css-admin/bootstrap.min.css" rel="stylesheet" />
@@ -59,7 +66,8 @@
                             <br />
                             <!--Search Users-->
                             <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
-                                <form action="SearchUser" method="post">
+                                @using (Ajax.BeginForm("SearchUser", "Admin", ajaxOpt))
+                                {
                                     <div class="row d-md-flex col-15 ">
                                         <div class="input-group">
                                             <input id="search" name="searchInput" type="text" class="form-control rounded" placeholder="Search user" aria-label="Search"
@@ -67,7 +75,7 @@
                                             <button type="submit" class="btn btn-primary btn-outline-primary">search</button>
                                         </div>
                                     </div>
-                                </form>
+                                }
                             </div>
                             <div style="width: 60%; margin: auto;">
                                 <!--Add Users-->
@@ -89,70 +97,15 @@
                                                 }
                                             </select>
                                             <p></p>
-                                            <button type="submit" class="btn btn-primary py-3 px-4 " >Add User</button>
+                                            <button type="submit" class="btn btn-primary py-3 px-4 ">Add User</button>
                                         </div>
                                         <p></p>
                                     </div>
                                 </form>
                             </div>
-                            <!--Show Users-->
-                            @if (!notFound)
-                            {
-                                <div class="table-responsive custom-table-responsive">
-                                    <table class="table custom-table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">
-                                                    <label class="control control--checkbox">
-                                                        <input type="checkbox" class="js-check-all" />
-                                                        <div class="control__indicator"></div>
-                                                    </label>
-                                                </th>
-                                                <th scope="col">Full name</th>
-                                                <th scope="col">email</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Is Vip</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (user u in users)
-                                            {
-
-                                                <tr scope="row">
-                                                    <th scope="row">
-                                                        <label class="control control--checkbox">
-                                                            <input type="checkbox" />
-                                                            <div class="control__indicator"></div>
-                                                        </label>
-                                                    </th>
-                                                    <td>
-                                                        @u.name
-                                                    </td>
-                                                    <td><a href="#">@u.email </a></td>
-                                                    <td>
-                                                        @u.role
-                                                    </td>
-                                                    @if (u.isVip)
-                                                    {
-                                                        <td> Vip</td>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>No</td>
-
-                                                    }
-
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            }
-                            else
-                            { <h1>no users</h1>}
-
+                            <div id="unrefresh">
+                                @Html.Partial("/Views/Admin/search.cshtml", users)
+                            </div>
                         </div>
                         <!--Edit  Coffee-->
                         <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
@@ -263,25 +216,25 @@
                                             </div>
                                         </form>
                                     </div>
-                                        <!--Display Tables-->>
-                                        <div class="table-responsive custom-table-responsive ">
-                                            <table class="table custom-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Table Number</th>
-                                                        <th scope="col">Number of seats</th>
-                                                        <th scope="col">Inside\Outside</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (Tbl t in tableLst)
-                                                    {
-                                                        
+                                    <!--Display Tables-->>
+                                    <div class="table-responsive custom-table-responsive ">
+                                        <table class="table custom-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Table Number</th>
+                                                    <th scope="col">Number of seats</th>
+                                                    <th scope="col">Inside\Outside</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (Tbl t in tableLst)
+                                                {
+
                                                     <tr scope="row">
                                                         <td>@t.tid</td>
-                                                         
+
                                                         <td>@t.amount</td>
-                                                        
+
                                                         @if (t.isIn)
                                                         {
                                                             <td>Inside </td>
@@ -292,15 +245,16 @@
                                                         }
 
                                                     </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                </section>
+                            </section>
 
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

@@ -144,29 +144,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202112302140266_tbl1.cs" />
-    <Compile Include="Migrations\202112302140266_tbl1.Designer.cs">
-      <DependentUpon>202112302140266_tbl1.cs</DependentUpon>
+    <Compile Include="Migrations\202201012145210_db.cs" />
+    <Compile Include="Migrations\202201012145210_db.Designer.cs">
+      <DependentUpon>202201012145210_db.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202112312015443_orderAdd2.cs" />
-    <Compile Include="Migrations\202112312015443_orderAdd2.Designer.cs">
-      <DependentUpon>202112312015443_orderAdd2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202201010036000_orderAdd21.cs" />
-    <Compile Include="Migrations\202201010036000_orderAdd21.Designer.cs">
-      <DependentUpon>202201010036000_orderAdd21.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202201010040453_orderAdd22.cs" />
-    <Compile Include="Migrations\202201010040453_orderAdd22.Designer.cs">
-      <DependentUpon>202201010040453_orderAdd22.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202201010041521_orderAdd23.cs" />
-    <Compile Include="Migrations\202201010041521_orderAdd23.Designer.cs">
-      <DependentUpon>202201010041521_orderAdd23.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202201010047241_orderAdd3.cs" />
-    <Compile Include="Migrations\202201010047241_orderAdd3.Designer.cs">
-      <DependentUpon>202201010047241_orderAdd3.cs</DependentUpon>
+    <Compile Include="Migrations\202201021848119_dat2.cs" />
+    <Compile Include="Migrations\202201021848119_dat2.Designer.cs">
+      <DependentUpon>202201021848119_dat2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Drink.cs" />
@@ -272,6 +256,8 @@
     <Content Include="images\person_2.jpg" />
     <Content Include="images\person_3.jpg" />
     <Content Include="images\person_4.jpg" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\js-admin\bootstrap.min.js" />
     <Content Include="Scripts\js-admin\jquery-3.3.1.min.js" />
     <Content Include="Scripts\js-admin\main.js" />
@@ -471,17 +457,16 @@
     <Content Include="scss\bootstrap\_utilities.scss" />
     <Content Include="scss\bootstrap\_variables.scss" />
     <Content Include="scss\style.scss" />
-    <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\coffees\Create.cshtml" />
-    <Content Include="Views\coffees\Delete.cshtml" />
-    <Content Include="Views\coffees\Details.cshtml" />
-    <Content Include="Views\coffees\Edit.cshtml" />
-    <Content Include="Views\coffees\Index.cshtml" />
+    <Content Include="Views\Admin\Index_backup.cshtml" />
     <Content Include="Views\Drinks\Create.cshtml" />
     <Content Include="Views\Drinks\Delete.cshtml" />
     <Content Include="Views\Drinks\Details.cshtml" />
     <Content Include="Views\Drinks\Edit.cshtml" />
     <Content Include="Views\Drinks\Index.cshtml" />
+    <Content Include="Scripts\db.php" />
+    <Content Include="Views\Admin\search.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Home\Cart.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />
@@ -495,7 +480,8 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\ProdCount.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\LogReg\Index.cshtml" />
     <Content Include="Views\Home\menu.cshtml" />
@@ -522,23 +508,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202112302140266_tbl1.resx">
-      <DependentUpon>202112302140266_tbl1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202201012145210_db.resx">
+      <DependentUpon>202201012145210_db.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202112312015443_orderAdd2.resx">
-      <DependentUpon>202112312015443_orderAdd2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202201010036000_orderAdd21.resx">
-      <DependentUpon>202201010036000_orderAdd21.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202201010040453_orderAdd22.resx">
-      <DependentUpon>202201010040453_orderAdd22.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202201010041521_orderAdd23.resx">
-      <DependentUpon>202201010041521_orderAdd23.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202201010047241_orderAdd3.resx">
-      <DependentUpon>202201010047241_orderAdd3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202201021848119_dat2.resx">
+      <DependentUpon>202201021848119_dat2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

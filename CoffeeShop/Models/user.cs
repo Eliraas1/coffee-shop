@@ -8,6 +8,8 @@ namespace CoffeeShop.Models
         public string name { get; set; }
         
         [Key]
+        public int uid { get; set; }
+
         public string email { get; set; }
 
         public string password { get; set; }

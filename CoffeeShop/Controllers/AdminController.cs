@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using CoffeeShop.Dal;
 using CoffeeShop.Models;
 using System.Text.RegularExpressions;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace CoffeeShop.Controllers
 {
@@ -39,7 +41,7 @@ namespace CoffeeShop.Controllers
             users = (from x in userDal.Users where x.name.Contains(searchedValue) select x).ToList<user>();
 
             TempData["users"] = users;
-            return RedirectToAction("Index");
+            return PartialView("search",users);
 
         }
 
@@ -109,13 +111,13 @@ namespace CoffeeShop.Controllers
             if (vip != null)
                 isVip = true;
 
-            if (usersd.Users.Find(email) != null)
+            if (checkDuplicatesEmails(email))
             {
                 Response.Write("<script>alert('Email already exist! Choose another email.')</script>");
                 return View("Index");
             }
 
-            user newUser = new user(fn, email, pass, role,age,isVip);
+            user newUser = new user(fn, email, pass, role, age, isVip);
             usersd.Users.Add(newUser);
             usersd.SaveChanges();
 
@@ -156,6 +158,18 @@ namespace CoffeeShop.Controllers
             return RedirectToAction("Index");
         }
 
+        public bool checkDuplicatesEmails(string email)
+        {
+            string strcon = ConfigurationManager.ConnectionStrings["UserDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
+            if (con.State == System.Data.ConnectionState.Closed)
+                con.Open();
+            SqlCommand cmd = new SqlCommand("select * from users where email='" + email + "'", con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+                return true;
 
+            return false;
+        }
     }
 }

@@ -1,0 +1,27 @@
+﻿@model int
+    @using CoffeeShop.Models;
+@{ 
+
+    List<Drink> drinkDict = (List<Drink>)Session["CartProd"];
+    int count = drinkDict.Count;
+
+}
+
+<li class="nav-item cart navbar-nav" id="unrefresh">
+    <a href="~/cart" class="nav-link">
+        <span class="icon icon-shopping_cart"></span>
+        <span class="bag d-flex justify-content-center align-items-center">
+            <small>
+                @if (Model == -1)
+                {
+                <script>alert("Out of stock pig")</script>
+                }
+
+                @count
+
+            </small>
+        </span>
+    </a>
+</li>
+
+
