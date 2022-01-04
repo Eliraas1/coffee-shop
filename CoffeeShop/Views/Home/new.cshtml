@@ -1,0 +1,27 @@
+﻿@model List<float>
+
+<div id="u1">
+    <div class="col col-lg-3 col-md-6 mt-5 cart-wrap ftco-animate">
+        <div class="cart-total mb-3">
+            <h3>Cart Totals</h3>
+                @if(Model != null) { 
+            <p class="d-flex">
+                <span>Subtotal</span>
+                <span>@Model[0] $</span>
+            </p>
+
+            <!--if user is vip so every 10 coffees he gets 1 free-->
+            <p class="d-flex">
+                <span>Discount</span>
+                <span>@Model[1] $</span>
+            </p>
+            <hr>
+            <p class="d-flex total-price">
+                <span>Total</span>
+                <span>@Model[0] $ </span>
+            </p>
+                }
+        </div>
+        <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+    </div>
+</div>

@@ -13,8 +13,6 @@ namespace CoffeeShop.Controllers
     public class HomeController : Controller
     {
 
-        
-        
         private drinksDal db = new drinksDal();
         private TblDal tableDB = new TblDal();
         private UserDal userDB = new UserDal();
@@ -23,7 +21,7 @@ namespace CoffeeShop.Controllers
         // GET: Account
         public ActionResult Index()
         {
-            
+            ViewBag.drinks = db.Drink.ToList();
             return View();
         }
 
@@ -92,10 +90,42 @@ namespace CoffeeShop.Controllers
         public ActionResult Cart() {
             Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
             ViewBag.Discount = calcDiscount(dict);
-
+            ViewBag.Total = calcTotal(dict);
             return View();
 
         }
+
+        public ActionResult UpdateCartAjax()
+        {
+            int newAmount = int.Parse(Request.Form["quantity"]);
+            Drink d = (Drink)TempData["change"];
+            Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+            if (dict[d] < newAmount)
+            {
+                dict[d] += 1;
+            }
+            else
+            {
+                dict[d] -= 1;
+            }
+            float disc = calcDiscount(dict);
+            float total = calcTotal(dict);
+
+            List<float> lst = new List<float>
+            {
+                total,disc
+            };
+            return PartialView("new",lst);
+        }
+
+        public ActionResult UpdateCart()
+        {
+            List<string> sa = Request.Form.AllKeys.ToList();
+            string newAmounts = Request.Form["quantity"];
+            Dictionary<Drink, int> dict = HandleChangesInCart(newAmounts);
+            return RedirectToAction("Cart");
+        }
+
 
         /*    Cart Help Functions      */
         public bool isContainDrink(Dictionary<Drink, int> dict, Drink drink)
@@ -156,6 +186,17 @@ namespace CoffeeShop.Controllers
             return discount;
         }
 
+        public float calcTotal(Dictionary<Drink, int> dict)
+        {
+            float total = 0;
+            foreach(Drink d in dict.Keys)
+            {
+                total += float.Parse(d.price) * dict[d];
+            }
+
+            return total;
+        }
+
         public bool isVip()
         {    
             if (Session["email"] == null)
@@ -163,6 +204,37 @@ namespace CoffeeShop.Controllers
 
             return userDB.Users.Find(int.Parse(Session["Uid"].ToString())).isVip;
         }
+
+        public void DeleteFromCart()
+        {
+
+        }
+
+        public Dictionary<Drink, int> HandleChangesInCart(string s)
+        {
+            Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+            string[] strLst;
+            if (!s.Contains(","))
+                return dict;
+
+            strLst = s.Split(',');
+            int count = 0;
+            foreach(Drink d in dict.Keys.ToList())
+            {
+                int newAmount = int.Parse(strLst[count++]);
+
+                if (newAmount == 0)
+                    dict.Remove(d);
+                else if (newAmount == 1)
+                    continue;
+                else
+                dict[d] = newAmount;
+            }
+
+            return dict;
+        }
+
+
         /*                             */
 
         /***********************sorting menu helper functions************************/
@@ -240,7 +312,6 @@ namespace CoffeeShop.Controllers
             string time = Request.Form["time"];
             string dateParsedToString = fixDate(dateRequest) + ' ' + time;
             string date = DateTime.Parse(dateParsedToString).ToString("dd/MM/yyyy HH:mm");
-
             string inOut = Request.Form["insideOutside"];
             bool isIn = false;
             if (inOut.Equals("Inside"))
@@ -303,8 +374,19 @@ namespace CoffeeShop.Controllers
 
         }
 
+        public bool isOutsideTableDays(string date)
+        {
+            return !(DateTime.Parse(date).DayOfWeek.ToString().Equals("Tuesday") || DateTime.Parse(date).DayOfWeek.ToString().Equals("Friday"));
+        }
         public void CheckAvailableAndBookOrder(string numberOfSeats, bool isIn, string date, string name = null)
         {
+            //Outside tables not available in Tusday or Friday 
+            if(!isIn && !isOutsideTableDays(date))
+            {
+                Response.Write("<script>alert('Outside are not available in Tusday or Friday')</script>");
+                return;
+            }
+            
             List<Tbl> tableList = tableDB.tbls.AsEnumerable().Where(tb => (tb.amount >= int.Parse(numberOfSeats))).ToList();
             if (tableList.Count() == 0)
                 return;

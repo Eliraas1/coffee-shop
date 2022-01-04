@@ -467,6 +467,7 @@
     <Content Include="Views\Admin\search.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Home\Cart.cshtml" />
+    <Content Include="Views\Home\Cart - backup.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />
@@ -481,6 +482,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\ProdCount.cshtml" />
+    <Content Include="Views\Home\new.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\LogReg\Index.cshtml" />

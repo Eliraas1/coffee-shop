@@ -10,7 +10,7 @@ namespace CoffeeShop.Models
         [Column(Order = 0)]
         public String Date { get; set; } /*DateTime.Now.ToString("dd/MM/yyyy HH:mm")	29/05/2015 05:50*/
 
-        public int Uid { get; set; }
+        public string Uid { get; set; }
 
         [Key]
         [Column(Order = 1)]
@@ -22,7 +22,7 @@ namespace CoffeeShop.Models
         {
             Date = date;
 
-            Uid = int.Parse(uid);
+            Uid = uid;
 
             Tid = tid;
 

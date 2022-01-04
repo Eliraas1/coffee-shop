@@ -86,6 +86,7 @@ namespace CoffeeShop.Controllers
 
         public ActionResult Logout()
         {
+            Session["Uid"] = null;
             Session["name"] = null;
             Session["email"] = null;
             Session["pass"] = null;
