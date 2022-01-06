@@ -23,6 +23,8 @@ namespace CoffeeShop
         {
             Session["CartCount"] = "0";
             Session["CartProd"] = new List<Drink>();
+
+            Session["CartDict"] = new Dictionary<Drink, int>();
         }
     }
 }

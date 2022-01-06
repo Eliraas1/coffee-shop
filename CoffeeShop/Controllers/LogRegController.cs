@@ -28,11 +28,11 @@ namespace CoffeeShop.Controllers
                 Response.Write("<script>alert('user IsAuthenticated successfully!')</script>");
                 while (dr.Read())
                 {
-
-                    Session["name"] = dr.GetValue(0).ToString();
-                    Session["email"] = dr.GetValue(1).ToString();
-                    Session["pass"] = dr.GetValue(2).ToString();
-                    Session["role"] = dr.GetValue(3).ToString();
+                    Session["Uid"] = dr.GetValue(0).ToString();
+                    Session["name"] = dr.GetValue(1).ToString();
+                    Session["email"] = dr.GetValue(2).ToString();
+                    Session["pass"] = dr.GetValue(3).ToString();
+                    Session["role"] = dr.GetValue(4).ToString();
                 }
                 return RedirectToAction("Index", "Home");
 
@@ -57,7 +57,14 @@ namespace CoffeeShop.Controllers
             if (vip.Equals("Vip"))
                 isVip = true;
 
-            SqlConnection con = new SqlConnection("Data Source=HIZO-PC;Initial Catalog=users;Integrated Security=TrueS");
+            if(checkDuplicatesEmail(email))
+            {
+                Response.Write("<script>alert('Email already exist!')</script>");
+                return View("Index");
+            }
+
+            string strcon = ConfigurationManager.ConnectionStrings["UserDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
             SqlCommand cmd = new SqlCommand(@"INSERT INTO [dbo].[users]
            ([name]
            ,[email]
@@ -79,11 +86,27 @@ namespace CoffeeShop.Controllers
 
         public ActionResult Logout()
         {
+            Session["Uid"] = null;
             Session["name"] = null;
             Session["email"] = null;
             Session["pass"] = null;
             Session["role"] = null;
             return RedirectToAction("Index", "Home");
+        }
+
+
+        public bool checkDuplicatesEmail(string email)
+        {
+            string strcon = ConfigurationManager.ConnectionStrings["UserDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
+            if (con.State == System.Data.ConnectionState.Closed)
+                con.Open();
+            SqlCommand cmd = new SqlCommand("select * from users where email='" + email + "'", con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+                return true;
+
+            return false;
         }
     }
 }

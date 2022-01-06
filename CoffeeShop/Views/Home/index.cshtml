@@ -1,6 +1,10 @@
-﻿@{
-    Layout ="~/Views/Shared/_Layout.cshtml" ;
-}
+﻿@using CoffeeShop.Models
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Drink> drinks = (List<Drink>)ViewBag.drinks;
+    List<Drink> alcohol = drinks.Where(d => d.isAlcohol).ToList();
+    List<Drink> coffees = drinks.Where(d => (!d.isAlcohol)).ToList();
+    List<Drink> mostPopularCoffees = coffees.OrderByDescending(c => c.popular).ToList();
+ }
 
 
 
@@ -14,7 +18,7 @@
                     <span class="subheading">Welcome</span>
                     <h1 class="mb-4">The Best Coffee Testing Experience</h1>
                     <p class="mb-4 mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+                    <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="/menu" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
                 </div>
             </div>
         </div>
@@ -27,7 +31,7 @@
                     <span class="subheading">Welcome</span>
                     <h1 class="mb-4">Amazing Taste &amp; Beautiful Place</h1>
                     <p class="mb-4 mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+                    <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="/menu" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
                 </div>
             </div>
         </div>
@@ -40,7 +44,7 @@
                     <span class="subheading">Welcome</span>
                     <h1 class="mb-4">Creamy Hot and Ready to Serve</h1>
                     <p class="mb-4 mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="#" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
+                    <p><a href="#" class="btn btn-primary p-3 px-xl-4 py-xl-3">Order Now</a> <a href="/menu" class="btn btn-white btn-outline-white p-3 px-xl-4 py-xl-3">View Menu</a></p>
                 </div>
             </div>
         </div>
@@ -77,10 +81,10 @@
             <!--Book table-->
             <div class="book p-4">
                 <h3>Book a Table</h3>
-                <form  action="BookTable" class="appointment-form" method="post">
+                <form action="BookTable" class="appointment-form" method="post">
                     <div class="d-md-flex">
                         <div class="form-group">
-                            <input type="number" step="1" max ="22" class="form-control" required placeholder="Number of seats" name="numberOfSeats"/>
+                            <input type="number" step="1" max="22" class="form-control" required placeholder="Number of seats" name="numberOfSeats" />
                         </div>
                         <div class="form-group ml-md-4">
                             <div class="input-group">
@@ -95,25 +99,25 @@
                         <div class="form-group">
                             <div class="input-wrap">
                                 <div class="icon"><span class="ion-md-calendar"></span></div>
-                                <input type="text" required class="form-control appointment_date" placeholder="Date" name="date"/>
+                                <input type="text" required class="form-control appointment_date" placeholder="Date" name="date" />
                             </div>
                         </div>
                         <div class="form-group ml-md-4">
                             <div class="input-wrap">
                                 <div class="icon"><span class="ion-ios-clock"></span></div>
-                                <input type="text" class="form-control appointment_time" required placeholder="Time" name="time"/>
+                                <input type="text" class="form-control appointment_time" required placeholder="Time" name="time" />
                             </div>
                         </div>
                     </div>
                     <div class="d-md-flex">
                         <div class="form-group">
-                            @if (Session["email"] == null){
-                            
-                            <input name="Name"class="form-control" placeholder="name"/>
-                            }
+                            @if (Session["email"] == null)
+                            {
+
+                <input name="Name" class="form-control" placeholder="name" />}
                         </div>
                         <div class="form-group ml-md-4">
-                            <input type="submit" value="Appointment" class="btn btn-white py-3 px-4"/>
+                            <input type="submit" value="Appointment" class="btn btn-white py-3 px-4" />
                         </div>
                     </div>
                 </form>
@@ -131,7 +135,7 @@
                     <span class="subheading">Discover</span>
                     <h2 class="mb-4">Our Menu</h2>
                     <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-                    <p><a href="#" class="btn btn-primary btn-outline-primary px-4 py-3">View Full Menu</a></p>
+                    <p><a href="/menu" class="btn btn-primary btn-outline-primary px-4 py-3">View Full Menu</a></p>
                 </div>
             </div>
             <div class="col-md-6">
@@ -218,50 +222,20 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
-                <div class="menu-entry">
-                    <a href="#" class="img" style="background-image: url(images/menu-1.jpg);"></a>
-                    <div class="text text-center pt-4">
-                        <h3><a href="#">Coffee Capuccino</a></h3>
-                        <p>A small river named Duden flows by their place and supplies</p>
-                        <p class="price"><span>$5.90</span></p>
-                        <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
+            @foreach(Drink d in mostPopularCoffees) {
+
+                 <div class="col-md-3">
+                    <div class="menu-entry">
+                        <a href="#" class="img" style="background-image: url(images/menu-@(d.img).jpg);"></a>
+                        <div class="text text-center pt-4">
+                            <h3><a href="#">@d.name</a></h3>
+                            <p>A small river named Duden flows by their place and supplies</p>
+                            <p class="price"><span>@d.price$</span></p>
+                            <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="menu-entry">
-                    <a href="#" class="img" style="background-image: url(images/menu-2.jpg);"></a>
-                    <div class="text text-center pt-4">
-                        <h3><a href="#">Coffee Capuccino</a></h3>
-                        <p>A small river named Duden flows by their place and supplies</p>
-                        <p class="price"><span>$5.90</span></p>
-                        <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="menu-entry">
-                    <a href="#" class="img" style="background-image: url(images/menu-3.jpg);"></a>
-                    <div class="text text-center pt-4">
-                        <h3><a href="#">Coffee Capuccino</a></h3>
-                        <p>A small river named Duden flows by their place and supplies</p>
-                        <p class="price"><span>$5.90</span></p>
-                        <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="menu-entry">
-                    <a href="#" class="img" style="background-image: url(images/menu-4.jpg);"></a>
-                    <div class="text text-center pt-4">
-                        <h3><a href="#">Coffee Capuccino</a></h3>
-                        <p>A small river named Duden flows by their place and supplies</p>
-                        <p class="price"><span>$5.90</span></p>
-                        <p><a href="#" class="btn btn-primary btn-outline-primary">Add to Cart</a></p>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
@@ -280,125 +254,93 @@
                 <div class="row">
                     <div class="col-md-12 nav-link-wrap mb-5">
                         <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Main Dish</a>
-                            <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Drinks</a>
-                            <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Desserts</a>
+                            <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">All Drinks</a>
+                            <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Alcohol</a>
+                            <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Coffees</a>
                         </div>
                     </div>
                     <div class="col-md-12 d-flex align-items-center">
 
                         <div class="tab-content ftco-animate" id="v-pills-tabContent">
+
                             <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
                                 <div class="row">
+                                @foreach (Drink d in alcohol)
+                                {
                                     <div class="col-md-4 text-center">
                                         <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/dish-1.jpg);"></a>
+                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-@(d.img).jpg);"></a>
                                             <div class="text">
-                                                <h3><a href="#">Grilled Beef</a></h3>
+                                                <h3><a href="#">@d.name</a></h3>
                                                 <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
+                                                <p class="price"><span>@d.price $</span></p>
                                                 <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
                                             </div>
+
                                         </div>
                                     </div>
+                                }
+
+                                @foreach (Drink d in coffees)
+                                {
                                     <div class="col-md-4 text-center">
                                         <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/dish-2.jpg);"></a>
+
+                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/menu-@(d.img).jpg);"></a>
                                             <div class="text">
-                                                <h3><a href="#">Grilled Beef</a></h3>
+                                                <h3><a href="#">@d.name</a></h3>
                                                 <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
+                                                <p class="price"><span>@d.price $</span></p>
                                                 <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
                                             </div>
+
                                         </div>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/dish-3.jpg);"></a>
-                                            <div class="text">
-                                                <h3><a href="#">Grilled Beef</a></h3>
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
-                                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                }
                                 </div>
                             </div>
+
                             <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
                                 <div class="row">
+                                @foreach(Drink d in alcohol) {
                                     <div class="col-md-4 text-center">
                                         <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-1.jpg);"></a>
+                                                
+                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-@(d.img).jpg);"></a>
                                             <div class="text">
-                                                <h3><a href="#">Lemonade Juice</a></h3>
+                                                <h3><a href="#">@d.name</a></h3>
                                                 <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
+                                                <p class="price"><span>@d.price $</span></p>
                                                 <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
                                             </div>
+                                                
                                         </div>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-2.jpg);"></a>
-                                            <div class="text">
-                                                <h3><a href="#">Pineapple Juice</a></h3>
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
-                                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/drink-3.jpg);"></a>
-                                            <div class="text">
-                                                <h3><a href="#">Soda Drinks</a></h3>
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
-                                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                }
                                 </div>
                             </div>
+
                             <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
                                 <div class="row">
-                                    <div class="col-md-4 text-center">
-                                        <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/dessert-1.jpg);"></a>
-                                            <div class="text">
-                                                <h3><a href="#">Hot Cake Honey</a></h3>
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
-                                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-                                            </div>
+                                    @foreach (Drink d in coffees)
+                                    {
+                                <div class="col-md-4 text-center">
+                                    <div class="menu-wrap">
+
+                                        <a href="#" class="menu-img img mb-4" style="background-image: url(images/menu-@(d.img).jpg);"></a>
+                                        <div class="text">
+                                            <h3><a href="#">@d.name</a></h3>
+                                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
+                                            <p class="price"><span>@d.price $</span></p>
+                                            <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/dessert-2.jpg);"></a>
-                                            <div class="text">
-                                                <h3><a href="#">Hot Cake Honey</a></h3>
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
-                                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <div class="menu-wrap">
-                                            <a href="#" class="menu-img img mb-4" style="background-image: url(images/dessert-3.jpg);"></a>
-                                            <div class="text">
-                                                <h3><a href="#">Hot Cake Honey</a></h3>
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
-                                                <p class="price"><span>$2.90</span></p>
-                                                <p><a href="#" class="btn btn-primary btn-outline-primary">Add to cart</a></p>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
+                                }
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -407,63 +349,7 @@
     </div>
 </section>
 
-<section class="ftco-section">
-    <div class="container">
-        <div class="row justify-content-center mb-5 pb-3">
-            <div class="col-md-7 heading-section ftco-animate text-center">
-                <h2 class="mb-4">Recent from blog</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-            </div>
-        </div>
-        <div class="row d-flex">
-            <div class="col-md-4 d-flex ftco-animate">
-                <div class="blog-entry align-self-stretch">
-                    <a href="blog-single.html" class="block-20" style="background-image: url('images/image_1.jpg');">
-                    </a>
-                    <div class="text py-4 d-block">
-                        <div class="meta">
-                            <div><a href="#">Sept 10, 2018</a></div>
-                            <div><a href="#">Admin</a></div>
-                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                        </div>
-                        <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 d-flex ftco-animate">
-                <div class="blog-entry align-self-stretch">
-                    <a href="blog-single.html" class="block-20" style="background-image: url('images/image_2.jpg');">
-                    </a>
-                    <div class="text py-4 d-block">
-                        <div class="meta">
-                            <div><a href="#">Sept 10, 2018</a></div>
-                            <div><a href="#">Admin</a></div>
-                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                        </div>
-                        <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 d-flex ftco-animate">
-                <div class="blog-entry align-self-stretch">
-                    <a href="blog-single.html" class="block-20" style="background-image: url('images/image_3.jpg');">
-                    </a>
-                    <div class="text py-4 d-block">
-                        <div class="meta">
-                            <div><a href="#">Sept 10, 2018</a></div>
-                            <div><a href="#">Admin</a></div>
-                            <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                        </div>
-                        <h3 class="heading mt-2"><a href="#">The Delicious Pizza</a></h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <section class="ftco-appointment">
     <div class="overlay"></div>
@@ -505,7 +391,7 @@
                     <div class="d-md-flex">
                         <div class="form-group">
                             @if (Session["email"] == null)
-                            { <input name="Name" class="form-control" placeholder="name" />}
+                            {<input name="Name" class="form-control" placeholder="name" />}
                         </div>
                         <div class="form-group ml-md-4">
                             <input type="submit" value="Appointment" class="btn btn-primary py-3 px-4">

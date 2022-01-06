@@ -13,9 +13,11 @@ namespace CoffeeShop
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+
+
             routes.MapRoute(
                 name: "Home",
-                url: "",
+                url: "Home",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
             routes.MapRoute(
@@ -32,6 +34,11 @@ namespace CoffeeShop
                name: "LogOut",
                url: "LogOut",
                defaults: new { controller = "LogReg", action = "Logout", id = UrlParameter.Optional }
+           );
+           routes.MapRoute(
+               name: "CreateTable",
+               url: "CreateTable",
+               defaults: new { controller = "Admin", action = "CreateTable", id = UrlParameter.Optional }
            );
             routes.MapRoute(
                name: "SearchUser",
@@ -77,7 +84,7 @@ namespace CoffeeShop
 
             routes.MapRoute(
               name: "booking",
-              url: "Index",
+              url: "BookTable",
               defaults: new { controller = "Home", action = "BookTable", id = UrlParameter.Optional }
           );
             routes.MapRoute(
@@ -85,12 +92,17 @@ namespace CoffeeShop
               url: "Cart",
               defaults: new { controller = "Home", action = "Cart", id = UrlParameter.Optional }
           );
-
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+            name: "updatecart",
+            url: "UpdateCart",
+            defaults: new { controller = "Home", action = "UpdateCart", id1 = UrlParameter.Optional }
+        );
+           
+            routes.MapRoute(
+            name: "Default",
+            url: "{controller}/{action}/{id}",
+            defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+        );
         }
     }
 }
