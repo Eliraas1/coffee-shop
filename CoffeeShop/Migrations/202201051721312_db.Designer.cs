@@ -7,13 +7,13 @@ namespace CoffeeShop.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class tbl1 : IMigrationMetadata
+    public sealed partial class db : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(tbl1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(db));
         
         string IMigrationMetadata.Id
         {
-            get { return "202112302140266_tbl1"; }
+            get { return "202201051721312_db"; }
         }
         
         string IMigrationMetadata.Source
