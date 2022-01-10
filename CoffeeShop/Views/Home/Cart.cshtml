@@ -1,18 +1,32 @@
 ﻿@using CoffeeShop.Models
-
-@{
-    ViewBag.Title = "Cart";
+@using Microsoft.Ajax.Utilities
+@{ ViewBag.Title = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int totals = 0;
-    List<Drink> drinks = ((List<Drink>)Session["CartProd"]);
-    foreach (Drink d in drinks)
-    {
-        totals += int.Parse(d.price);
-    }
+
 
     List<Drink> didi = ((Dictionary<Drink, int>)Session["CartDict"]).Keys?.ToList();
     Dictionary<Drink, int> drinkDict = (Dictionary<Drink, int>)Session["CartDict"];
+
+    float total = 0;
+    foreach (Drink d in drinkDict.Keys)
+    {
+        total += float.Parse(d.price) * drinkDict[d];
+    }
+
+    AjaxOptions ajaxOptic = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "unref"
+    };
+    List<float> s = new List<float>()
+{
+total,
+ViewBag.discount
+};
+
 }
+
 
 <section class="ftco-section ftco-cart">
     <div class="container">
@@ -23,85 +37,116 @@
                         <thead class="thead-primary">
                             <tr class="text-center">
                                 <th>&nbsp;</th>
-                                <!--<th>&nbsp;</th>-->
+                                <th>&nbsp;</th>
                                 <th>Product</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
-                                <th>Total</th>
-                                <th style="display:none"></th>
+                                @*<th>Total</th>*@
                             </tr>
                         </thead>
                         <tbody>
-                            @Html.BeginForm("UpdateCart","Home",FormMethod.Post){
-                            @foreach (Drink d in didi)
+                            @for (int i = 0; i < didi.Count; i++)
                             {
-                            <tr class="text-center">
-                                <!--   <td class="product-remove"><a href="#"><span class="icon-close"></span></a></td>-->
-                                @if (!d.isAlcohol)
-                                {
-                                    <td class="image-prod"><div class="img" style="background-image:url(../../images/menu-@(d.img).jpg);"></div></td>
-                                }
-                                @if (d.isAlcohol)
-                                {
-                                    <td class="image-prod"><div class="img" style="background-image:url(../../images/drink-@(d.img).jpg);"></div></td>
-                                }
+                                Drink d = didi[i];
+                                <tr class="text-center">
+                                    <td class="product-remove">@Html.ActionLink(" ", "RemoveItemFromCart", new {did = d.id} , new {@class = "icon-close" }) </td>
+                                    @if (!d.isAlcohol)
+                                    {
+                                        <td class="image-prod"><div class="img" style="background-image:url(../../images/menu-@(d.img).jpg);"></div></td>
+                                    }
+                                    @if (d.isAlcohol)
+                                    {
+                                        <td class="image-prod"><div class="img" style="background-image:url(../../images/drink-@(d.img).jpg);"></div></td>
+                                    }
 
+                                    <td class="product-name">
+                                        <h3>@d.name</h3>
+                                        <p>Far far away, behind the word mountains, far from the countries</p>
+                                    </td>
+                                    <td class="price">@d.price$</td>
+                                    <td class="quantity">
+                                        @using (Ajax.BeginForm("UpdateCart", "Home", d.id, ajaxOptic, new { id = "newPrice" + i }))
+                                        {
+                                            <div class="input-group mb-2">
 
-                            <td class="product-name">
-                                <h3>@d.name</h3>
-                                @if (!d.isAlcohol)
-                                {
-                                    <p>Far far away, behind the word mountains, far from the countries</p>
-                                }
-                                else 
-                                {
-                                    <p>Only 18+</p>
-                                }
-                            </td>
+                                                <input id="did" style="display:none" name="did" value="@d.id" />
+                                                <input type="number" id="qua" start="@drinkDict[d]" step="1" onchange="$('#newPrice'+@i).trigger('submit')" name="quantity" class="quantity form-control input-number" value="@drinkDict[d]" min="1" max="@d.amount">
 
-                                <td class="price">@d.price$</td>
+                                            </div>
+                                        }
+                                    </td>
+                                    
+                                </tr><!-- END TR-->
 
-                                <td class="quantity">
-                                    <div class="input-group mb-3">
-                                        <input type="number" start="@drinkDict[d]" step="1" name="quantity" class="quantity form-control input-number" value="@drinkDict[d]" min="0" max="@d.amount">
-                                    </div>
-                                </td>
-
-                                <td class="total">@{float DrinkPrice = (drinkDict[d] * float.Parse(d.price));} @DrinkPrice$</td>
-
-                                <td> <button type="submit" class="btn btn-primary py-1 px-2 bg-dark" style="color:black"> udpate changes  </button>   </td>
-
-                            </tr><!-- END TR-->
-                            }
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-end">
-            <div class="col col-lg-3 col-md-6 mt-5 cart-wrap ftco-animate">
-                <div class="cart-total mb-3">
-                    <h3>Cart Totals</h3>
-                    <p class="d-flex">
-                        <span>Subtotal</span>
-                        <span>@ViewBag.Total $</span>
-                    </p>
 
-                    <!--if user is vip so every 10 coffees he gets 1 free-->
-                    <p class="d-flex">
-                        <span>Discount</span>
-                        <span>@ViewBag.Discount $</span>
-                    </p>
-                    <hr>
-                    <p class="d-flex total-price">
-                        <span>Total</span>
-                        <span>@(ViewBag.Total - ViewBag.Discount)$ </span>
-                    </p>
-                </div>
-                <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
-            </div>
+
+        <div id="unref" class="row justify-content-end col col-lg-3 col-md-6 mt-5 cart-wrap ftco-animate cart-total mb-3">
+            @Html.Partial("~/Views/Home/new.cshtml", s)
         </div>
     </div>
 </section>
 
+
+
+@*<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>*@
+
+@*@{
+        <script type="text/javascript">
+            // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
+            function UpdateMyWidgets(qua) {
+
+                var did = $('#did').val();
+                $.ajax({
+                    url: "@Url.Action("UpdateCart",d)",    // whom to call
+                    type: "POST",
+
+                    datatype: 'json',
+                    data: {'qua' : qua , 'did' : did},
+            success: function (data) {
+            $("#unref").html(data);  // tell it which div to append on return
+            }
+        });
+
+    }
+        </script>
+    }*@
+
+  @*{
+<script type="text/javascript">
+    // this one button will update all your partials/widgets, you can add more partials in this function and just copy paste.
+    function UpdateMyWidgets() {
+    var qua = $('#qua').val();
+    var did = @d.id;
+    $.ajax({
+        url: "@Url.Action("UpdateCart")",    // whom to call
+        type: "POST",
+
+        datatype: 'json',
+        data: {'qua' : qua , 'did' : did},
+        success: function (data) {
+        $("#unref").html(data);  // tell it which div to append on return
+        }
+        });
+
+    $.ajax({
+        url: "@Url.Action("totalDrink")",    // whom to call
+        type: "POST",
+
+        datatype: 'json',
+        data: html,
+        success: function (data) {
+        $("#unref2").html(data);  // tell it which div to append on return
+        }
+        });
+    }
+</script>
+}*@

@@ -84,7 +84,7 @@ namespace CoffeeShop
 
             routes.MapRoute(
               name: "booking",
-              url: "Home",
+              url: "BookTable",
               defaults: new { controller = "Home", action = "BookTable", id = UrlParameter.Optional }
           );
             routes.MapRoute(
@@ -95,7 +95,7 @@ namespace CoffeeShop
             routes.MapRoute(
             name: "updatecart",
             url: "UpdateCart",
-            defaults: new { controller = "Home", action = "UpdateCart", id = UrlParameter.Optional }
+            defaults: new { controller = "Home", action = "UpdateCart", id1 = UrlParameter.Optional }
         );
            
             routes.MapRoute(

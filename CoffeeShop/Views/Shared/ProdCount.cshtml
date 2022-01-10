@@ -3,7 +3,8 @@
 @{ 
 
     List<Drink> drinkDict = (List<Drink>)Session["CartProd"];
-    int count = drinkDict.Count;
+    Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+    int count = dict.Count;
 
 }
 

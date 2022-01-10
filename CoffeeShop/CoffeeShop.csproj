@@ -144,13 +144,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202201012145210_db.cs" />
-    <Compile Include="Migrations\202201012145210_db.Designer.cs">
-      <DependentUpon>202201012145210_db.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202201021848119_dat2.cs" />
-    <Compile Include="Migrations\202201021848119_dat2.Designer.cs">
-      <DependentUpon>202201021848119_dat2.cs</DependentUpon>
+    <Compile Include="Migrations\202201051721312_db.cs" />
+    <Compile Include="Migrations\202201051721312_db.Designer.cs">
+      <DependentUpon>202201051721312_db.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Drink.cs" />
@@ -466,8 +462,8 @@
     <Content Include="Scripts\db.php" />
     <Content Include="Views\Admin\search.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Home\Cart1.cshtml" />
     <Content Include="Views\Home\Cart.cshtml" />
-    <Content Include="Views\Home\Cart - backup.cshtml" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Scripts\JavaScript.js" />
     <Content Include="Content\Style1.css" />
@@ -483,6 +479,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\ProdCount.cshtml" />
     <Content Include="Views\Home\new.cshtml" />
+    <Content Include="Views\Home\new1.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Views\LogReg\Index.cshtml" />
@@ -510,11 +507,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202201012145210_db.resx">
-      <DependentUpon>202201012145210_db.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202201021848119_dat2.resx">
-      <DependentUpon>202201021848119_dat2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202201051721312_db.resx">
+      <DependentUpon>202201051721312_db.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
