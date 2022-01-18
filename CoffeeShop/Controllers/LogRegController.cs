@@ -1,6 +1,8 @@
 ﻿using System.Data.SqlClient;
 using System.Web.Mvc;
 using System.Configuration;
+using System.Collections.Generic;
+using CoffeeShop.Models;
 
 namespace CoffeeShop.Controllers
 {
@@ -33,6 +35,8 @@ namespace CoffeeShop.Controllers
                     Session["email"] = dr.GetValue(2).ToString();
                     Session["pass"] = dr.GetValue(3).ToString();
                     Session["role"] = dr.GetValue(4).ToString();
+                    Session["CartDict"] = Session["CartDict"] = new Dictionary<Drink, int>();
+                    Session["isBookedTable"] = null;
                 }
                 return RedirectToAction("Index", "Home");
 
@@ -91,6 +95,8 @@ namespace CoffeeShop.Controllers
             Session["email"] = null;
             Session["pass"] = null;
             Session["role"] = null;
+            Session["CartDict"] = new Dictionary<Drink, int>();
+            Session["isBookedTable"] = null;
             return RedirectToAction("Index", "Home");
         }
 

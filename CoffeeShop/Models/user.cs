@@ -21,6 +21,8 @@ namespace CoffeeShop.Models
 
         public bool isVip { get; set; }
 
+
+
         public user(string name, string email, string password, string role,int age, bool isVip = false)
         {
             this.name = name;

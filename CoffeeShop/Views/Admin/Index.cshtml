@@ -14,6 +14,7 @@
     List<user> users = new List<user>();
     List<Drink> drinkLst = new List<Drink>();
     List<Tbl> tableLst = new List<Tbl>();
+    List<TableOrder> tableOrderLst = new List<TableOrder>();
     List<string> roles = new List<string>();
     roles.Add("admin");
     roles.Add("customer");
@@ -35,12 +36,19 @@
     {
         tableLst = (List<Tbl>)TempData["tables"];
     }
+    if (TempData != null && TempData["tblorder"] != null)
+    {
+        tableOrderLst = (List<TableOrder>)TempData["tblorder"];
+    }
     bool notFound = false;
     if (users != null && users.Count() == 0)
     {
         notFound = true;
     }
 }
+
+
+
 
 <link href="~/Content/css-admin/style.css" rel="stylesheet" />
 <link href="~/Content/css-admin/bootstrap.min.css" rel="stylesheet" />
@@ -108,10 +116,10 @@
                             </div>
                         </div>
                         <!--Edit  Coffee-->
-                        <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
-                            <section class="ftco-section">
-                                <div class="container">
-                                    <div class="row">
+                        <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab" >
+                            <section class="ftco-section" >
+                                <div class="container" >
+                                    <div class="row" >
                                         @foreach (Drink c in drinkLst)
                                         {
                                             <div class="col-md-3">
@@ -197,9 +205,9 @@
 
                         <!--Tables-->
                         <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
-                            <section class="ftco-section">
-                                <div class="container">
-                                    <div style="width: 50%; margin: auto;">
+                            
+                                
+                                    <div style="width: 30%; margin: auto;">
                                         <!--Create Table-->>
                                         <form action="CreateTable" method="post">
                                             <div class="row d-md-flex col-15 ">
@@ -209,16 +217,18 @@
                                                         <option style="background: black">Inside</option>
                                                         <option style="background: black">Outside</option>
                                                     </select>
-                                                    <p></p>
                                                     <button type="submit" class="btn btn-primary py-3 px-4 ">Add Table</button>
                                                 </div>
                                                 <p></p>
                                             </div>
                                         </form>
                                     </div>
-                                    <!--Display Tables-->>
+                                    <br />
+                                    <br />
+                                    <!--Display Tables-->
+                                        <div style=" text-align:center;"><h2 style="color: #C49B63;"><br />Total Tables <br /></h2></div>
                                     <div class="table-responsive custom-table-responsive ">
-                                        <table class="table custom-table">
+                                        <table class="table custom-table" >
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Table Number</th>
@@ -230,30 +240,65 @@
                                                 @foreach (Tbl t in tableLst)
                                                 {
 
-                                                    <tr scope="row">
-                                                        <td>@t.tid</td>
+                                        <tr scope="row">
+                                            <td>@t.tid</td>
 
-                                                        <td>@t.amount</td>
+                                            <td>@t.amount</td>
 
-                                                        @if (t.isIn)
-                                                        {
-                                                            <td>Inside </td>
-                                                        }
+                                            @if (t.isIn)
+                                            {
+                                        <td>Inside </td> }
                                                         else
                                                         {
-                                                            <td>Outside </td>
-                                                        }
+                                        <td>Outside </td>}
 
-                                                    </tr>
-                                                }
+                                        </tr>}
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-                            </section>
+                                            
+                                            
+                                        <div style=" text-align: center;"><h2 style="color: #C49B63;"><br />Tables Order<br /></h2></div>
+                                        <table class="table custom-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Order Name</th>
+                                                    <th scope="col">Table ID</th>
+                                                    <th scope="col">Order Date</th>
+                                                    <th scope="col">Inside\Outside</th>
+                                                    <th scope="col">Taken Seats/Total Seats</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (TableOrder t in tableOrderLst)
+                                                {
 
-                        </div>
-                    </div>
+                                                <tr scope="row">
+
+                                                    <td>
+                                                        @t.Uid
+                                                    </td>
+                                                    <td>@t.Tid</td>
+                                                    <td>@t.Date</td>
+
+                                                    @if (tableLst.Find(t2 => t2.tid == t.Tid).isIn)
+                                                    {
+                                                <td>Inside </td> }
+                                                                else
+                                                                {
+                                                <td>Outside </td>}
+                                                    <td>@t.NumberOfSeats.ToString() / @tableLst.Find(t2 => t2.tid == t.Tid).amount.ToString()</td>
+                                                </tr>
+                                                            }
+                                            </tbody>
+                                        </table>
+                                           
+                                       
+                                    </div>
+
+                                
+                            
+                         </div>
+                     </div>
                 </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ namespace CoffeeShop.Controllers
         private TblDal tableDB = new TblDal();
         private UserDal userDB = new UserDal();
         private TableOrderDal tableOrderDB = new TableOrderDal();
+        private OrdersDal orders = new OrdersDal();
         private Dictionary<Drink, int> cartDictionary = new Dictionary<Drink, int>();
         // GET: Account
         public ActionResult Index()
@@ -60,6 +61,59 @@ namespace CoffeeShop.Controllers
             else if (s.Equals("price-desc"))
                 ViewBag.sort = DescByPrice();
             return View();
+        }
+
+        public ActionResult CheckOut()
+        {
+            Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+            float disc = calcDiscount(dict);
+            float total = calcTotal(dict);
+            Session["take"] = Request.Form["take"];
+            Response.Write("<script>alert(take)</script>");
+            List<float> lst = new List<float>
+            {
+                total,disc
+            };
+            return View("Checkout",lst);
+        }
+
+        public ActionResult Pay()
+        {
+            int id = orders.orders.Count(),tid=-1;
+            bool confirm = false, take;
+            string tdate = null, date = DateTime.Now.ToString();
+
+            Tuple<string, int> tableOrderKey;
+            Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+
+            if (Session["take"] != null && Session["take"].ToString().Equals("on"))
+                take = true;
+            else
+                take = false;
+
+            //check if user connected, if not its a guest and have a name field in form
+            string name = "";
+            if (Session["email"] == null)
+                name = "Guest " + Request.Form["Name"];
+            else
+            {
+                user us = userDB.Users.Find(int.Parse(Session["Uid"].ToString()));
+                name = us.role + " " + us.name;
+            }
+
+            if (Session["orderId"] != null && take == false) {
+                tableOrderKey = (Tuple<string, int>)Session["orderId"];
+                TableOrder tblOrder = tableOrderDB.TableOrder.Find(tableOrderKey.Item1, tableOrderKey.Item2);
+                tdate = tblOrder.Date;
+                tid = tblOrder.Tid;
+            }
+            foreach (Drink d in dict.Keys)
+            {
+                orders.orders.Add(new Order(id, name, d.id, d.amount, confirm, tid, tdate, date, take));
+                orders.SaveChanges();
+            }
+
+            return RedirectToAction("cart");
         }
 
         public ActionResult RemoveItemFromCart(int? did)
@@ -367,7 +421,7 @@ namespace CoffeeShop.Controllers
                 name = "Guest " + Request.Form["Name"];
             else
             {
-                user us = userDB.Users.Find(Session["Uid"]);
+                user us = userDB.Users.Find(int.Parse(Session["Uid"].ToString()));
                 name = us.role + " " + us.name;
             }
 
@@ -403,8 +457,11 @@ namespace CoffeeShop.Controllers
             //Outside tables not available in Tusday or Friday 
             if(!isIn && !isOutsideTableDays(date))
             {
-                Response.Write("<script>alert('Outside are not available in Tusday or Friday')</script>");
-                return;
+                while (true)
+                {
+                    Response.Write("<script>alert('Outside are not available in Tusday or Friday')</script>");                    
+                    return;
+                }
             }
             
             List<Tbl> tableList = tableDB.tbls.AsEnumerable().Where(tb => (tb.amount >= int.Parse(numberOfSeats))).ToList();
@@ -422,9 +479,36 @@ namespace CoffeeShop.Controllers
                 if (CheckIfAvailable(date, t.tid))
                 {
                     BookOrderTable(date, t.tid, numberOfSeats);
+                    Session["isBookedTable"] = true;
+                    Session["orderId"] = new Tuple<string, int>(date, t.tid);
                     return;
                 }
             }
+        }
+
+        public ActionResult BookTableCart()
+        {
+            string isUpdate = Request.Form["submitBtn"];
+            if (Session["orderId"] != null && isUpdate.Equals("Update"))
+            {
+                RemoveTableOrder((Tuple<string, int>)Session["orderId"]);
+            }
+
+            string date = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            string inOut = Request.Form["insideOutside"];
+            bool isIn = false;
+            if (inOut.Equals("Inside"))
+                isIn = true;
+            string numberOfSeats = Request.Form["numberOfSeats"];
+
+            CheckAvailableAndBookOrder(numberOfSeats, isIn, date);
+            return RedirectToAction("Cart");
+        }
+
+
+        public void RemoveTableOrder(Tuple<string, int> tup)
+        {
+            tableOrderDB.TableOrder.Remove(tableOrderDB.TableOrder.Find(tup.Item1, tup.Item2));
         }
         /**************************************************************************/
     }
