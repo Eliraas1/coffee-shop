@@ -36,6 +36,7 @@ namespace CoffeeShop.Controllers
                     Session["pass"] = dr.GetValue(3).ToString();
                     Session["role"] = dr.GetValue(4).ToString();
                     Session["CartDict"] = Session["CartDict"] = new Dictionary<Drink, int>();
+                    Session["isBookedTable"] = null;
                 }
                 return RedirectToAction("Index", "Home");
 
@@ -95,6 +96,7 @@ namespace CoffeeShop.Controllers
             Session["pass"] = null;
             Session["role"] = null;
             Session["CartDict"] = new Dictionary<Drink, int>();
+            Session["isBookedTable"] = null;
             return RedirectToAction("Index", "Home");
         }
 

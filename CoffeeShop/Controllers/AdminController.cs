@@ -15,6 +15,7 @@ namespace CoffeeShop.Controllers
         private drinksDal db = new drinksDal();
         private UserDal udb = new UserDal();
         private TblDal tdb = new TblDal();
+        private TableOrderDal tbldal = new TableOrderDal();
         // GET: Admin
         public ActionResult Index(List<user> users)
         {
@@ -28,6 +29,7 @@ namespace CoffeeShop.Controllers
             TempData["users"] = users;
             TempData["drinks"] = drinkList;
             TempData["tables"] = tdb.tbls.ToList();
+            TempData["tblorder"] = tbldal.TableOrder.ToList();
             return View();
         }
 

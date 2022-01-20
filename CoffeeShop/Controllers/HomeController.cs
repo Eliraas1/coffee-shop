@@ -17,11 +17,12 @@ namespace CoffeeShop.Controllers
         private TblDal tableDB = new TblDal();
         private UserDal userDB = new UserDal();
         private TableOrderDal tableOrderDB = new TableOrderDal();
+        private OrdersDal orders = new OrdersDal();
         private Dictionary<Drink, int> cartDictionary = new Dictionary<Drink, int>();
         // GET: Account
         public ActionResult Index()
         {
-            ViewBag.drinks = db.Drink.ToList();
+            ViewBag.drinks = db.Drink.ToList();            
             return View();
         }
 
@@ -59,7 +60,76 @@ namespace CoffeeShop.Controllers
                 ViewBag.sort = AscByPrice();
             else if (s.Equals("price-desc"))
                 ViewBag.sort = DescByPrice();
+            else if (s.Equals("Business lunch"))
+                ViewBag.sort = sortByBusinessLunch();
+
             return View();
+        }
+
+        public ActionResult CheckOut()
+        {
+            Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+            float disc = calcDiscount(dict);
+            float total = calcTotal(dict);
+            Session["take"] = Request.Form["take"];
+            List<float> lst = new List<float>
+            {
+                total,disc
+            };
+            return View("Checkout",lst);
+        }
+
+        public ActionResult Pay()
+        {
+            int id = orders.orders.Count(),tid=-1;
+            bool confirm = false, take;
+            string tdate = null, date = DateTime.Now.ToString();
+
+            Tuple<string, int> tableOrderKey;
+            Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+
+            if (Session["take"] != null && Session["take"].ToString().Equals("on"))
+            {
+                take = true;
+                if (Session["isBookedTable"] != null && bool.Parse(Session["isBookedTable"].ToString()) == true)
+                {
+                    RemoveTableOrder((Tuple<string, int>)Session["orderId"]);
+                    Session["isBookedTable"] = false;
+                }
+            }
+            else
+                take = false;
+
+            //check if user connected, if not its a guest and have a name field in form
+            string name = "";
+            if (Session["email"] == null)
+                name = "Guest " + Request.Form["Name"];
+            else
+            {
+                user us = userDB.Users.Find(int.Parse(Session["Uid"].ToString()));
+                name = us.role + " " + us.name;
+            }
+
+            if (Session["orderId"] != null && take == false) {
+                tableOrderKey = (Tuple<string, int>)Session["orderId"];
+                TableOrder tblOrder = tableOrderDB.TableOrder.Find(tableOrderKey.Item1, tableOrderKey.Item2);
+                tdate = tblOrder.Date;
+                tid = tblOrder.Tid;
+            }
+            foreach (Drink d in dict.Keys)
+            {
+                orders.orders.Add(new Order(id, name, d.id, dict[d], confirm, tid, tdate, date, take));
+                orders.SaveChanges();
+            }
+
+            //client pay his order->reset cart dictionary session and declare flag for not changing table.
+            //client buy and take away -> he want to buy again -> he can order table
+            //if client already paid and not take away-> he ordered table -> cant change his table
+            dict.Clear();
+            Session["isPay"] = true;
+            ViewBag.drinks = db.Drink.ToList();
+            TempData["msg"] = "payment";
+            return RedirectToAction("Index");
         }
 
         public ActionResult RemoveItemFromCart(int? did)
@@ -98,6 +168,12 @@ namespace CoffeeShop.Controllers
 
         public ActionResult Cart() {
             Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+            //check if there is an alcohol in cart for age validation
+            if (dict.Keys.Where(d => d.isAlcohol).Count() > 0)
+                Session["AgeLimit"] = true;
+            else
+                Session["AgeLimit"] = false;
+
             ViewBag.Discount = calcDiscount(dict);
             ViewBag.Total = calcTotal(dict);
             return View();
@@ -185,7 +261,8 @@ namespace CoffeeShop.Controllers
 
         public float calcDiscount(Dictionary<Drink, int> dict)
         {
-            float discount = 0;
+            //check if there is a business launch in cart
+            float discount = calcBusinessDiscount(dict);
             if (!isVip())
                 return discount;
 
@@ -200,11 +277,27 @@ namespace CoffeeShop.Controllers
                 count += dict[drink];
                 if((count/10) > 0)
                     discount += (count/10) * float.Parse(drink.price); 
-
             }
             
             return discount;
         }
+
+        public float calcBusinessDiscount(Dictionary<Drink, int> dict)
+        {
+            float disc = 0;
+            List<Drink> businessLst = dict.Keys.ToList().Where(d => d.isBusiness).ToList();
+            if (businessLst.Count == 0)
+                return disc;
+
+            foreach(Drink drink in businessLst)
+            {
+                disc += (float.Parse(drink.price) * (float)0.1) * dict[drink];
+            }
+
+            return disc;
+
+        }
+
 
         public float calcTotal(Dictionary<Drink, int> dict)
         {
@@ -322,6 +415,13 @@ namespace CoffeeShop.Controllers
             return d;
 
         }
+
+        public List<Drink> sortByBusinessLunch()
+        {
+            List<Drink> d = db.Drink.ToList<Drink>();
+            d = db.Drink.AsEnumerable().Where(drink=>drink.isBusiness).ToList();
+            return d;
+        }
         /**************************************************************************/
 
         /***********************booking table and  helper functions************************/
@@ -425,9 +525,36 @@ namespace CoffeeShop.Controllers
                 if (CheckIfAvailable(date, t.tid))
                 {
                     BookOrderTable(date, t.tid, numberOfSeats);
+                    Session["isBookedTable"] = true;
+                    Session["orderId"] = new Tuple<string, int>(date, t.tid);
                     return;
                 }
             }
+        }
+
+        public ActionResult BookTableCart()
+        {
+            string isUpdate = Request.Form["submitBtn"];
+            if (Session["orderId"] != null && isUpdate.Equals("Update"))
+            {
+                RemoveTableOrder((Tuple<string, int>)Session["orderId"]);
+            }
+
+            string date = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            string inOut = Request.Form["insideOutside"];
+            bool isIn = false;
+            if (inOut.Equals("Inside"))
+                isIn = true;
+            string numberOfSeats = Request.Form["numberOfSeats"];
+
+            CheckAvailableAndBookOrder(numberOfSeats, isIn, date);
+            return RedirectToAction("Cart");
+        }
+
+
+        public void RemoveTableOrder(Tuple<string, int> tup)
+        {
+            tableOrderDB.TableOrder.Remove(tableOrderDB.TableOrder.Find(tup.Item1, tup.Item2));
         }
         /**************************************************************************/
     }

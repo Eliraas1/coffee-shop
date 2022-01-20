@@ -4,6 +4,7 @@
     List<Drink> alcohol = drinks.Where(d => d.isAlcohol).ToList();
     List<Drink> coffees = drinks.Where(d => (!d.isAlcohol)).ToList();
     List<Drink> mostPopularCoffees = coffees.OrderByDescending(c => c.popular).ToList();
+   
  }
 
 
@@ -222,7 +223,8 @@
             </div>
         </div>
         <div class="row">
-            @foreach(Drink d in mostPopularCoffees) {
+            @foreach (Drink d in mostPopularCoffees)
+            {
 
                  <div class="col-md-3">
                     <div class="menu-entry">
@@ -302,7 +304,8 @@
 
                             <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
                                 <div class="row">
-                                @foreach(Drink d in alcohol) {
+                                @foreach (Drink d in alcohol)
+                                {
                                     <div class="col-md-4 text-center">
                                         <div class="menu-wrap">
                                                 
@@ -337,7 +340,7 @@
 
                                     </div>
                                 </div>
-                                }
+                                    }
                                 </div>
                             </div>
 
@@ -402,6 +405,4 @@
         </div>
     </div>
 </section>
-
-
 

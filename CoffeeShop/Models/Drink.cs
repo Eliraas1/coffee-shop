@@ -22,11 +22,14 @@ namespace CoffeeShop.Models
         [Required]
         public int popular { get; set; }
 
+        public bool isBusiness { get; set; }
+
         public Drink()
         {
             popular = 0;
+            
         }
-        public Drink(string name, string img,string price, bool al, int am)
+        public Drink(string name, string img,string price, bool al, int am, bool business = false)
         {
             popular = 0;
             this.price = price;
@@ -34,6 +37,7 @@ namespace CoffeeShop.Models
             this.img = img;
             isAlcohol = al;
             amount = am;
+            isBusiness = business;
         }
     }
 }
