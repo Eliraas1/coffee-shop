@@ -329,7 +329,6 @@ C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרו�
 C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\obj\Debug\CoffeeShop.csproj.AssemblyReference.cache
 C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db.resources
-C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\obj\Debug\CoffeeShop.Migrations.dat2.resources
 C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\obj\Debug\CoffeeShop.csproj.GenerateResource.cache
 C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\obj\Debug\CoffeeShop.csproj.CoreCompileInputs.cache
 C:\Users\Eliran\Desktop\לימודים\שנה ג\מבוא לתקשורת\פרויקט\CoffeeShop\CoffeeShop\obj\Debug\CoffeeShop.dll

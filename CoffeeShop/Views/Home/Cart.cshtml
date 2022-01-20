@@ -113,7 +113,7 @@ else
             <div class="overlay"></div>
             <div class="container">
                 <div class="row no-gutters d-md-flex align-items-center d-flex justify-content-xl-around">
-                    @if (take || !isPay)
+                    @if (take || !isPay || !isBooked)
                     {
         <div class="col-md-6 appointment ftco-animate" id="book">
             <h3 class="mb-3">Book a Table</h3>

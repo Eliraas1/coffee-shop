@@ -37,5 +37,10 @@ namespace CoffeeShop.Models
             this.date = date;
             this.take = take;
         }
+
+        public Order()
+        {
+
+        }
     }
 }

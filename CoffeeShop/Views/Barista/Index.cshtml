@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<Order>
+@using CoffeeShop.Models;
+@using Microsoft.Ajax.Utilities
+@{ 
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    AjaxOptions ajaxOpt = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "unreff"
+    };
+
+    List<Order> ord = Model;
+
+ }
+
+
+
+
+<link href="~/Content/css-admin/style.css" rel="stylesheet" />
+<link href="~/Content/css-admin/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/css-admin/owl.carousel.min.css" rel="stylesheet" />
+<a href="~/Content/css-admin/bootstrap.min.css.map"></a>
+<section class="ftco-menu mb-5 pb-5">
+    <div class="container">
+        <div class="col-lg-12 ftco-animate p-md-5">
+            <div class="row">
+                <div class="col-md-12 nav-link-wrap mb-5">
+                    <div class="nav ftco-animate nav-pills justify-content-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-0-tab" data-toggle="pill" href="#v-pills-0" role="tab" aria-controls="v-pills-0" aria-selected="true">Users</a>
+                        <a class="nav-link" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="false">Edit Coffees</a>
+                        <a class="nav-link " id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Create Drink</a>
+                        <a class="nav-link" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Tables</a>
+                    </div>
+                    <!--Add Users ----Search Users---- Show Users-->
+                    <div class="tab-content ftco-animate" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-0" role="tabpanel" aria-labelledby="v-pills-0-tab">
+                            <br />
+                            <!--Search Users-->
+                            <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
+                                @using (Ajax.BeginForm("SearchOrders", "Barista", null, ajaxOpt, new { id = "searchrecords" }))
+                                {
+                                    <div class="row d-md-flex col-15 ">
+                                        <div class="input-group">
+                                            <input id="search" name="searchInput" type="text" onchange="$('#searchrecords').trigger('submit')" class="form-control rounded" placeholder="Search user" aria-label="Search"
+                                                   aria-describedby="search-addon" />
+                                            <button type="submit" class="btn btn-primary btn-outline-primary">search</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <br />
+                            <div id="unreff">
+                                @Html.Partial("/Views/Barista/search.cshtml", ord)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/Scripts/js-admin/popper.min.js"></script>
+<script src="~/Scripts/js-admin/bootstrap.min.js"></script>
+<script src="~/Scripts/js-admin/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/js-admin/main.js"></script>
+
+

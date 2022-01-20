@@ -88,7 +88,7 @@ namespace CoffeeShop.Controllers
             Tuple<string, int> tableOrderKey;
             Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
 
-            if (Session["take"] != null && Session["take"].ToString().Equals("on"))
+            if (Session["take"] != null && Session["take"].ToString().Equals("on") || (Session["isBookedTable"] != null && !bool.Parse(Session["isBookedTable"].ToString())))
             {
                 take = true;
                 if (Session["isBookedTable"] != null && bool.Parse(Session["isBookedTable"].ToString()) == true)
