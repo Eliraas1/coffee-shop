@@ -76,17 +76,21 @@ namespace CoffeeShop.Controllers
             {
                 total,disc
             };
+            
             return View("Checkout",lst);
         }
 
         public ActionResult Pay()
         {
+
             int id = orders.orders.Count(),tid=-1;
             bool confirm = false, take;
             string tdate = null, date = DateTime.Now.ToString();
 
             Tuple<string, int> tableOrderKey;
             Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
+
+            float totalPrice = calcTotal(dict) - calcDiscount(dict);
 
             if (Session["take"] != null && Session["take"].ToString().Equals("on") || (Session["isBookedTable"] != null && !bool.Parse(Session["isBookedTable"].ToString())))
             {
@@ -118,7 +122,7 @@ namespace CoffeeShop.Controllers
             }
             foreach (Drink d in dict.Keys)
             {
-                orders.orders.Add(new Order(id, name, d.id, dict[d], confirm, tid, tdate, date, take));
+                orders.orders.Add(new Order(id, name, d.id, dict[d], confirm, tid, tdate, date, take , totalPrice.ToString()));
                 orders.SaveChanges();
             }
 

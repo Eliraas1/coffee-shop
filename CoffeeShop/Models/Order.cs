@@ -25,7 +25,8 @@ namespace CoffeeShop.Models
         public string date { get; set; }
         public bool take { get; set; }
 
-        public Order(int id, string uid, int did, int amount, bool confirm, int tid, string tdate, string date, bool take)
+        public string price  { get; set; }
+        public Order(int id, string uid, int did, int amount, bool confirm, int tid, string tdate, string date, bool take, string price = null)
         {
             this.id = id;
             this.uid = uid;
@@ -36,6 +37,7 @@ namespace CoffeeShop.Models
             this.tdate = tdate;
             this.date = date;
             this.take = take;
+            this.price = price;
         }
 
         public Order()

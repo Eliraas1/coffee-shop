@@ -1,52 +1,69 @@
-﻿
+﻿@model List<Order>
 @using CoffeeShop.Models
 @using CoffeeShop.Dal
-@model List<Order>
+@using Microsoft.Ajax.Utilities
 @{ AjaxOptions ajaxOptic = new AjaxOptions
-                {
-                    HttpMethod = "POST",
-                    InsertionMode = InsertionMode.Replace,
-                    UpdateTargetId = "unref12"
-                };
-                List<Order> ord = Model;
-                drinksDal dr = new drinksDal();
-                Dictionary<List<Drink>, float> d = new Dictionary<List<Drink>, float>(ord.Count);
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "unref12"
+    };
 
-                for (int i = 0; i < ord.Count; i++)
-                {
-                    float totalPrice = 0;
-                    List<Drink> drinks = new List<Drink>();
-                    int j = i;
-                    while ((j < ord.Count && ord[i].id == ord[j].id) || j == i)
-                    {
-                        Drink drink = (Drink)dr.Drink.Find(ord[j].did);
-                        totalPrice += float.Parse(drink.price) * ord[j].amount;
-                        drinks.Add(drink);
-                        j++;
-                    }
-                    i = j - 1;
+    AjaxOptions ajaxConfirm = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "unreff"
+    };
 
-                    d.Add(drinks, totalPrice);
-                }
-                int countDups = 0;
-                int dups = 0;
-                int id_table = 0;
-                for (int i = 0; i < ord.Count; i++)
-                {
-                    if (i != 0 && ord[i].id == ord[i - 1].id)
-                    {
-                        dups++;
-                    }
-                }
-                int rows = ord.Count - dups;
-}
-
-<!--Show Users-->
+    AjaxOptions ajaxUpdt = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "unreffs"
+    };
 
 
+    AjaxOptions s = (AjaxOptions)ViewBag.ajax;
+    List<Order> ord = Model;
+    drinksDal dr = new drinksDal();
+    Dictionary<List<Drink>, float> d = new Dictionary<List<Drink>, float>(ord.Count);
+
+    for (int i = 0; i < ord.Count; i++)
+    {
+        float totalPrice = 0;
+        List<Drink> drinks = new List<Drink>();
+        int j = i;
+        while ((j < ord.Count && ord[i].id == ord[j].id) || j == i)
+        {
+            Drink drink = (Drink)dr.Drink.Find(ord[j].did);
+            totalPrice += float.Parse(drink.price) * ord[j].amount;
+            drinks.Add(drink);
+            j++;
+        }
+        i = j - 1;
+
+        d.Add(drinks, totalPrice);
+    }
+    int unique = 0;
+    int countDups = 0;
+    int dups = 0;
+    int id_table = 0;
+    for (int i = 0; i < ord.Count; i++)
+    {
+        if (i != 0 && ord[i].id == ord[i - 1].id)
+        {
+            dups++;
+        }
+    }
+    int rows = ord.Count - dups;
+    int sasi = 0;
+    } <!--Show Users-->
 
 
-<div class="table-responsive custom-table-responsive ">
+
+
+<div class="table-responsive custom-table-responsive " id="unreffs">
     <table class="table custom-table ">
 
         <thead>
@@ -64,13 +81,13 @@
                 <th scope="col">Confirm Payment</th>
                 <th scope="col">TableID</th>
                 <th scope="col">Table Date</th>
-
+                <th scope="col"></th>
             </tr>
         </thead>
 
         @for (int i = 0; i < ord.Count; i++)
         {
-
+            
             if (i != 0 && ord[i].id == ord[i - 1].id)
             {
                 countDups++;
@@ -89,67 +106,90 @@
     <td>@ord[i].id </td>
     <td>@ord[i].date </td>
     <td>@ord[i].uid </td>
-    <td>@d.ElementAt(i - countDups).Value </td>
+    <td>@ord[i].price $</td>
 
     <td>@ord[i].confirm.ToString()</td>
     @if (!ord[i].take)
     {
-        <td>@ord[i].tid </td>
-                                <td>@ord[i].tdate </td> }
-                                                    else
-                                                    {
-                                <td></td>
-                                                        <td> </td>}
+<td>@ord[i].tid </td>
+                        <td>@ord[i].tdate </td> }
+                                            else
+                                            {
+                        <td></td>
+                                                <td> </td>}
 
-</tr> for (int j = 0, k = i - countDups; j < d.ElementAt(k).Key.Count; j++)
-                    {
-                    <tr id="@("" + id_table + "-"+ j + "prod")" scope="row">
-                    <td class="product-remove">@Html.ActionLink(" ", "RemoveItemFromCart", null, new { @class = "icon-close" }) </td>
-
-        @if (d.ElementAt(k).Key[j].isBusiness)
+                <td id="unreff">
+        @if (!ord[i].confirm)
         {
-            if (d.ElementAt(k).Key[j].name.Contains("Burger"))
+            using (Ajax.BeginForm("Confirm", "Barista", ajaxConfirm))
             {
-
-             <td class="image-prod"><div class="img" style="background-image: url(../../images/burger-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>
-            }
-            else
-            {
-                <td class="image-prod"><div class="img" style="background-image: url(../../images/dish-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>
+                <input name="oid" value="@ord[i].id" style="display:none" />
+                                            <input name="did" value="@ord[i].did" style="display:none" />
+                                                                        <input name="" type="submit" class="btn btn-outline-success" value="Confirm" />
             }
         }
-        @if (!d.ElementAt(k).Key[j].isAlcohol && !d.ElementAt(k).Key[j].isBusiness)
+        else
         {
-            <td class="image-prod"><div class="img" style="background-image: url(../../images/menu-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>
+        <input name="" type="submit" class="btn btn-outline-success" value="Confirmed" disabled />                 
         }
-        @if (d.ElementAt(k).Key[j].isAlcohol && !d.ElementAt(k).Key[j].isBusiness)
+                </td> 
+
+</tr>
+                for (int j = 0, k = i - countDups; j < d.ElementAt(k).Key.Count; j++)
+                {
+<tr id="@("" + id_table + "-" + j + "prod")" scope="row">
+    <td class="product-remove">@Html.ActionLink(" ", "RemoveItemFromCart", null, new { @class = "icon-close" }) </td>
+
+    @if (d.ElementAt(k).Key[j].isBusiness)
+    {
+        if (d.ElementAt(k).Key[j].name.Contains("Burger"))
         {
-            <td class="image-prod"><div class="img" style="background-image: url(../../images/drink-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>
-        }
-        
 
-        <td class="product-name">
-            <h3>@d.ElementAt(k).Key[j].name</h3>
-            @*<p>Far far away, behind the word mountains, far from the countries</p>*@
-        </td>
-        <td class="price">@d.ElementAt(k).Key[j].price$</td>
-        <td></td>
-        <td class="quantity">
-            @using (Ajax.BeginForm("UpdateCart", "Home", null, ajaxOptic, new { id = "newPrice" + 1 }))
-            {
-    <div class="input-group mb-2">
+<td class="image-prod"><div class="img" style="background-image: url(../../images/burger-@(d.ElementAt(k).Key[j].img).jpg);"></div></td> }
+        else
+        {
+<td class="image-prod"><div class="img" style="background-image: url(../../images/dish-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>}
+    }
+    @if (!d.ElementAt(k).Key[j].isAlcohol && !d.ElementAt(k).Key[j].isBusiness)
+    {
+<td class="image-prod"><div class="img" style="background-image: url(../../images/menu-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>}
+    @if (d.ElementAt(k).Key[j].isAlcohol && !d.ElementAt(k).Key[j].isBusiness)
+    {
+<td class="image-prod"><div class="img" style="background-image: url(../../images/drink-@(d.ElementAt(k).Key[j].img).jpg);"></div></td>}
 
-        <input id="did" style="display:none" name="did" value="5" />
-        <input type="number" id="qua" start="1" step="1" onchange="$('#newPrice'+1).trigger('submit')" name="quantity" class="quantity form-control input-number" value="@ord[i].amount" style="max-width:50%; margin-left:50px;" min="1">
 
-    </div>}
-        </td>
-        <td></td>
-        <td></td>
-    </tr><!-- END TR-->}
+    <td class="product-name">
+        <h3>@d.ElementAt(k).Key[j].name</h3>
+        @*<p>Far far away, behind the word mountains, far from the countries</p>*@
+    </td>
+    <td class="price">@d.ElementAt(k).Key[j].price$</td>
+    <td></td>
+    <td class="quantity">        
+        @using (Ajax.BeginForm("UpdateOrder", "Barista", null, ajaxUpdt, new { id = "newPrice" + unique }))
+        {
+
+            <div class="input-group mb-2">
+                @if (i == 57)
+                {
+                    <input style="display:none" />
                 }
-                id_table++;
+                <input id="did" value="@d.ElementAt(k).Key[j].id" style="display:none" name="did" value="5" />
+                <input id="oid" value="@ord[i].id" style="display:none" name="oid" value="5" />
+                <input type="number" id="qua" start="1" step="1" onchange="$('#newPrice' + @unique).trigger('submit')" name="quantity" class="quantity form-control input-number" value="@ord[i+j].amount" style="max-width:50%; margin-left:50px;" min="1" />
+
+            </div>
+            <button type="submit">update</button>
+
+        }
+    </td>
+    <td></td>
+    <td></td>
+</tr><!-- END TR-->
+                {unique++;}
+                }
             }
+            id_table++;
+        }
         @{countDups = 0;}
 
     </table>
@@ -196,61 +236,5 @@
             }, false);
         })(j);
     }
-
-    @*for (var j = 0; j < colapse.length; j++) {
-        colapse[j].addEventListener('change', (event) => {
-
-            console.log(j);
-            if (event.currentTarget.checked) {
-                prod[j].style.display = 'revert';
-                setTimeout(function () {
-                    prod[j].style.opacity = '1';
-                }, 10);
-
-            } else {
-                prod[j].style.opacity = '0';
-                setTimeout(function () {
-                    prod[j].style.display = 'none';
-                }, 500);
-
-            }
-
-        })
-
-
-    }*@
-
-    document.getElementById('colapse').addEventListener('change', (event) => {
-        if (event.currentTarget.checked) {
-            document.getElementById('prod').style.display = 'revert';
-            setTimeout(function () {
-                document.getElementById('prod').style.opacity = '1';
-            }, 10);
-
-        } else {
-            document.getElementById('prod').style.opacity = '0';
-            setTimeout(function () {
-                document.getElementById('prod').style.display = 'none';
-            }, 500);
-
-        }
-    })
-    document.getElementById('colapse1').addEventListener('change', (event) => {
-        if (event.currentTarget.checked) {
-            document.getElementById('prod').style.display = 'revert';
-            setTimeout(function () {
-                document.getElementById('prod').style.opacity = '1';
-            }, 10);
-
-        } else {
-            document.getElementById('prod').style.opacity = '0';
-            setTimeout(function () {
-                document.getElementById('prod').style.display = 'none';
-            }, 500);
-
-        }
-    })
+    
 </script>
-
-
-

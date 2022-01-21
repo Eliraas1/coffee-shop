@@ -1,12 +1,11 @@
-﻿
+﻿@model List<Order>
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@model List<Order>
 @using CoffeeShop.Models;
-@using Microsoft.Ajax.Utilities
 @{ 
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,6 +16,7 @@
         UpdateTargetId = "unreff"
     };
 
+    ViewBag.ajax = ajaxOpt;
     List<Order> ord = Model;
 
  }
@@ -58,7 +58,7 @@
                             </div>
                             <br />
                             <div id="unreff">
-                                @Html.Partial("/Views/Barista/search.cshtml", ord)
+                                @Html.Partial("/Views/Barista/search.cshtml",ord)
                             </div>
                         </div>
                     </div>
