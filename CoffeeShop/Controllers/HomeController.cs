@@ -20,8 +20,8 @@ namespace CoffeeShop.Controllers
         private Dictionary<Drink, int> cartDictionary = new Dictionary<Drink, int>();
         // GET: Account
         public ActionResult Index()
-        {
-            ViewBag.drinks = db.Drink.ToList();            
+        {   
+            ViewBag.drinks = db.Drink.ToList();                       
             return View();
         }
 
@@ -130,7 +130,8 @@ namespace CoffeeShop.Controllers
             dict.Clear();
             Session["isPay"] = true;
             ViewBag.drinks = db.Drink.ToList();
-            TempData["msg"] = "payment";
+            
+            Session["msg"] = "payment success";
             return RedirectToAction("Index");
         }
 

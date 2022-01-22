@@ -1,14 +1,20 @@
-﻿@using CoffeeShop.Models
+﻿
+@using CoffeeShop.Models
 @{ Layout = "~/Views/Shared/_Layout.cshtml";
     List<Drink> drinks = (List<Drink>)ViewBag.drinks;
     List<Drink> alcohol = drinks.Where(d => d.isAlcohol).ToList();
     List<Drink> coffees = drinks.Where(d => (!d.isAlcohol)).ToList();
     List<Drink> mostPopularCoffees = coffees.OrderByDescending(c => c.popular).ToList();
-   
+
  }
 
-
-
+@if (Session["msg"] != null)
+{
+    <script>
+        alert("Payment done");
+    </script>
+    { Session["msg"] = null; }
+}
 
 <section class="home-slider owl-carousel">
     <div class="slider-item" style="background-image: url(images/bg_1.jpg);">
