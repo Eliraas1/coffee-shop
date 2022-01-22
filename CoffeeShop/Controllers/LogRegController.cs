@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
+﻿using System.Data.SqlClient;
 using System.Web.Mvc;
 using System.Configuration;
+using System.Collections.Generic;
+using CoffeeShop.Models;
 
 namespace CoffeeShop.Controllers
 {
@@ -32,11 +30,13 @@ namespace CoffeeShop.Controllers
                 Response.Write("<script>alert('user IsAuthenticated successfully!')</script>");
                 while (dr.Read())
                 {
-
-                    Session["name"] = dr.GetValue(0).ToString();
-                    Session["email"] = dr.GetValue(1).ToString();
-                    Session["pass"] = dr.GetValue(2).ToString();
-                    Session["role"] = dr.GetValue(3).ToString();
+                    Session["Uid"] = dr.GetValue(0).ToString();
+                    Session["name"] = dr.GetValue(1).ToString();
+                    Session["email"] = dr.GetValue(2).ToString();
+                    Session["pass"] = dr.GetValue(3).ToString();
+                    Session["role"] = dr.GetValue(4).ToString();
+                    Session["CartDict"] = Session["CartDict"] = new Dictionary<Drink, int>();
+                    Session["isBookedTable"] = null;
                 }
                 return RedirectToAction("Index", "Home");
 
@@ -55,14 +55,29 @@ namespace CoffeeShop.Controllers
             string role = "customer";
             var email = Request.Form["email"];
             var pass = Request.Form["pass"];
-            SqlConnection con = new SqlConnection("Data Source=DESKTOP-U2T54MF;database=CoffeProj;Integrated Security=True");
+            int age = int.Parse(Request.Form["age"]);
+            string vip = Request.Form["VipOrStantard"];
+            bool isVip = false;
+            if (vip.Equals("Vip"))
+                isVip = true;
+
+            if(checkDuplicatesEmail(email))
+            {
+                Response.Write("<script>alert('Email already exist!')</script>");
+                return View("Index");
+            }
+
+            string strcon = ConfigurationManager.ConnectionStrings["UserDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
             SqlCommand cmd = new SqlCommand(@"INSERT INTO [dbo].[users]
            ([name]
            ,[email]
            ,[password]
-           ,[role])
+           ,[role]
+           ,[age]
+            ,[isVip])
             VALUES
-           ('" + name + "' ,'" + email + "' ,'" + pass + "','" + role + "')", con);
+           ('" + name + "' ,'" + email + "' ,'" + pass + "','" + role + "','" + age + "','" + isVip + "')", con);
 
             con.Open();
             cmd.ExecuteNonQuery();
@@ -75,15 +90,32 @@ namespace CoffeeShop.Controllers
 
         public ActionResult Logout()
         {
+            Session["Uid"] = null;
             Session["name"] = null;
             Session["email"] = null;
             Session["pass"] = null;
             Session["role"] = null;
+            Session["CartDict"] = new Dictionary<Drink, int>();
+            Session["isBookedTable"] = null;
             return RedirectToAction("Index", "Home");
+        }
+
+
+        public bool checkDuplicatesEmail(string email)
+        {
+            string strcon = ConfigurationManager.ConnectionStrings["UserDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
+            if (con.State == System.Data.ConnectionState.Closed)
+                con.Open();
+            SqlCommand cmd = new SqlCommand("select * from users where email='" + email + "'", con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+                return true;
+
+            return false;
         }
     }
 }
-
 
 
 
