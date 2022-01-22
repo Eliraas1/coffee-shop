@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 
-
 namespace CoffeeShop.Controllers
 {
     public class HomeController : Controller
@@ -92,7 +91,7 @@ namespace CoffeeShop.Controllers
 
             float totalPrice = calcTotal(dict) - calcDiscount(dict);
 
-            if (Session["take"] != null && Session["take"].ToString().Equals("on") || (Session["isBookedTable"] != null && !bool.Parse(Session["isBookedTable"].ToString())))
+            if ((Session["take"] != null && Session["take"].ToString().Contains("on")) || (Session["isBookedTable"] != null && !bool.Parse(Session["isBookedTable"].ToString())))
             {
                 take = true;
                 if (Session["isBookedTable"] != null && bool.Parse(Session["isBookedTable"].ToString()) == true)
@@ -107,11 +106,10 @@ namespace CoffeeShop.Controllers
             //check if user connected, if not its a guest and have a name field in form
             string name = "";
             if (Session["email"] == null)
-                name = "Guest " + Request.Form["Name"];
+                name = "Guest " + Request.Form["fn"] +" "+ Request.Form["ln"];
             else
-            {
-                user us = userDB.Users.Find(int.Parse(Session["Uid"].ToString()));
-                name = us.role + " " + us.name;
+            {               
+                name = Session["Uid"].ToString();
             }
 
             if (Session["orderId"] != null && take == false) {

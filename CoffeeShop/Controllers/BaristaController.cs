@@ -59,6 +59,7 @@ namespace CoffeeShop.Controllers
             return l;
         }
 
+        [HttpPost]
         public ActionResult UpdateOrder()
         {
             string oid = Request.Form["oid"];
@@ -75,11 +76,19 @@ namespace CoffeeShop.Controllers
             dr.Close();
             cmd = new SqlCommand(" UPDATE Orders  SET price = '" + price + "'  Where id = " + oid + "", con);
             dr = cmd.ExecuteReader();
-
+            //ViewBag.str = oid;
             List<Order> ord = orders.orders.ToList<Order>();
-            return PartialView("search", ord);
+           //ystem.Threading.Thread.Sleep(1000);
+            return RedirectToAction("Index");
         }
 
+        public ActionResult DeleteOrder(int dx, int dy)
+        {
+            UpdateOrder(dx, dy);
+            orders.orders.Remove(orders.orders.Find(dx,dy));
+            orders.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
         public float calcTotalPrice(int oid, int did,int quant)
         {
@@ -99,6 +108,20 @@ namespace CoffeeShop.Controllers
 
             return total;
 
+        }
+
+        public void UpdateOrder(int id, int did)
+        {
+
+            Order ord = orders.orders.Find(id, did);
+            float price = float.Parse(ord.price) - float.Parse(drinks.Drink.Find(did).price) * ord.amount;
+            string strcon = ConfigurationManager.ConnectionStrings["OrdersDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
+            if (con.State == System.Data.ConnectionState.Closed)
+                con.Open();
+            SqlCommand cmd = new SqlCommand(" UPDATE Orders  SET price = '" + price + "'  Where id = " + id + "", con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            
         }
 
 
