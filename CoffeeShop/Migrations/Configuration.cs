@@ -5,15 +5,14 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<CoffeeShop.Dal.OrdersDal>
+    internal sealed class Configuration : DbMigrationsConfiguration<CoffeeShop.Dal.drinksDal>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "CoffeeShop.Dal.OrdersDal";
         }
 
-        protected override void Seed(CoffeeShop.Dal.OrdersDal context)
+        protected override void Seed(CoffeeShop.Dal.drinksDal context)
         {
             //  This method will be called after migrating to the latest version.
 

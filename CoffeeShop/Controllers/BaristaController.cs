@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,7 +15,7 @@ namespace CoffeeShop.Controllers
     {
         private OrdersDal orders = new OrdersDal();
         private drinksDal drinks = new drinksDal();
-
+        private UserDal us = new UserDal();
 
         // GET: Barista
         public ActionResult Index()
@@ -25,10 +26,23 @@ namespace CoffeeShop.Controllers
 
         public ActionResult SearchOrders()
         {
-            String searchedValue = Request.Form["searchInput"];
-
             List<Order> ord = orders.orders.ToList<Order>();
-            ord = (from x in orders.orders where x.uid.Contains(searchedValue) select x).ToList<Order>();
+            List<string> Names = null;
+            String searchedValue = Request.Form["searchInput"];
+            if(searchedValue.Equals(""))
+                return PartialView("search", ord);
+            bool z = us.Users.AsEnumerable().Where(u => u.name.Contains(searchedValue)).ToList().Count > 0;
+            if (z)
+            {
+                Names = us.Users.Where(u => u.name.ToLower().Contains(searchedValue.ToLower())).Select(u => u.uid.ToString()).ToList();
+
+                
+            }
+            
+            if(Names != null)
+                ord = (from x in orders.orders where Names.Any(s => s.ToLower().Contains(x.uid.ToLower())) select x).ToList<Order>();
+            else
+                ord = (from x in orders.orders where x.uid.ToLower().Contains(searchedValue.ToLower()) select x).ToList<Order>();
 
 
             return PartialView("search", ord);

@@ -28,15 +28,17 @@
     List<Order> ord = Model;
     drinksDal dr = new drinksDal();
     Dictionary<List<Drink>, float> d = new Dictionary<List<Drink>, float>(ord.Count);
+    Drink drink = new Drink();
 
     for (int i = 0; i < ord.Count; i++)
     {
         float totalPrice = 0;
         List<Drink> drinks = new List<Drink>();
+
         int j = i;
         while ((j < ord.Count && ord[i].id == ord[j].id) || j == i)
         {
-            Drink drink = (Drink)dr.Drink.Find(ord[j].did);
+            drink = (Drink)dr.Drink.Find(ord[j].did);
             totalPrice += float.Parse(drink.price) * ord[j].amount;
             drinks.Add(drink);
             j++;

@@ -39,7 +39,16 @@
     if (Session["isPay"] != null)
     {
         isPay = true;
-    } }
+    }
+
+    bool isOutsideMsg = false;
+    if(Session["msgOutside"] != null)
+    {
+        isOutsideMsg = true;
+    }
+
+    
+    }
 
 
 <section class="ftco-section ftco-cart">
@@ -164,6 +173,7 @@ else
 <script>
     document.getElementById('ShowBook').addEventListener('change', (event) => {
         if (event.currentTarget.checked) {
+            console.log("asdasd");
             document.getElementById('book').style.display = 'none';
         } else {
             document.getElementById('book').style.display = '';
@@ -179,8 +189,13 @@ else
     })
 </script>
 
+@if (isOutsideMsg)
+{
+    <script> alert("outside tables are not available in Sunday and friday")    </script>
+    {Session["msgOutside"] = null;
+    }
+}
 
-@*AgeLimit*@
 
 @*<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>

@@ -1,8 +1,7 @@
 ﻿@model CoffeeShop.Models.Drink
 @using CoffeeShop.Models;
 @using Microsoft.Ajax.Utilities
-@{
-    ViewBag.Title = "Index";
+@{ ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     AjaxOptions ajaxOpt = new AjaxOptions
     {
@@ -44,9 +43,7 @@
     if (users != null && users.Count() == 0)
     {
         notFound = true;
-    }
-}
-
+    } }
 
 
 
@@ -54,7 +51,8 @@
 <link href="~/Content/css-admin/bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/css-admin/owl.carousel.min.css" rel="stylesheet" />
 <a href="~/Content/css-admin/bootstrap.min.css.map"></a>
-<section class="ftco-menu mb-5 pb-5">
+
+<section class="ftco-menu mb-5 pb-5" id="auth">
     <div class="container">
         <div class="col-lg-12 ftco-animate p-md-5">
             <div class="row">
@@ -74,16 +72,18 @@
                             <br />
                             <!--Search Users-->
                             <div class="col-md-17 mb-7" style="width: 30%; margin: auto;">
-                                @using (Ajax.BeginForm("SearchUser", "Admin", ajaxOpt))
+
+                                @using (Ajax.BeginForm("SearchUser", "Admin", null, ajaxOpt, new { id = "SearchUsers" }))
                                 {
-                                    <div class="row d-md-flex col-15 ">
-                                        <div class="input-group">
-                                            <input id="search" name="searchInput" type="text" class="form-control rounded" placeholder="Search user" aria-label="Search"
-                                                   aria-describedby="search-addon" />
-                                            <button type="submit" class="btn btn-primary btn-outline-primary">search</button>
-                                        </div>
-                                    </div>
-                                }
+                    <div class="row d-md-flex col-15 ">
+                        <div class="input-group">
+                            <input id="search" name="searchInput" type="text" class="form-control rounded" placeholder="Search user" aria-label="Search"
+                                   aria-describedby="search-addon" />
+                            <button type="submit" class="btn btn-primary btn-outline-primary">search</button>
+                        </div>
+                    </div>}
+
+
                             </div>
                             <div style="width: 60%; margin: auto;">
                                 <!--Add Users-->
@@ -101,8 +101,7 @@
                                             <select class="form-control" name="role">
                                                 @foreach (string role in roles)
                                                 {
-                                                    <option style="background: black">@role</option>
-                                                }
+                                    <option style="background: black">@role</option>}
                                             </select>
                                             <p></p>
                                             <button type="submit" class="btn btn-primary py-3 px-4 ">Add User</button>
@@ -116,74 +115,81 @@
                             </div>
                         </div>
                         <!--Edit  Coffee-->
-                        <div class="tab-pane fade" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab" >
-                            <section class="ftco-section" >
-                                <div class="container" >
-                                    <div class="row" >
+
+                        <div class="tab-pane fade show" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                            <section class="ftco-section">
+                                <div class="container">
+                                    <div class="row">
                                         @foreach (Drink c in drinkLst)
                                         {
-                                            <div class="col-md-3">
-                                                <div class="menu-entry">
-                                                    <form action="EditCoffee" method="post">
-                                                        @if (!c.isAlcohol)
-                                                        {
-                                                            <a href="#" class="img" style="background-image: url(../../images/menu-@(c.img).jpg);"></a>
-                                                        }
-                                                        @if (c.isAlcohol)
-                                                        {<a href="#" class="img" style="background-image: url(../../images/drink-@(c.img).jpg);"></a>}
-                                                        <div class="text text-center pt-4">
-                                                            <h3><a href="#" name="key">@c.name</a></h3>
-                                                            <p class="price"><span>$@c.price</span></p>
-                                                            <p class="price"><span>Stock: @c.amount</span></p>
-                                                            <input type="number" required="" min="0" step="0.01" name="newPrice" placeholder="enter new price" />
-                                                            <input type="number" required="" min="0" step="1" name="newAmount" placeholder="Stock: @c.amount" />
-                                                            <input style="display:none" type="text" name=@c.id />
-                                                            <p></p>
-                                                            <p> <button name="btnSubmit" type="submit" class="btn btn-primary btn-outline-primary">Edit Product</button> </p>
-                                                        </div>
-                                                    </form>
-                                                    <form action="DeleteDrink" method="post">
-                                                        <div class="text text-center">
-                                                            <input style="display:none" type="text" name=@c.id />
-                                                            <button name="btnSubmit" type="submit" class="btn btn-primary btn-outline-primary">Delete Product</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        }
+                            <div class="col-md-3">
+                                <div class="menu-entry">
+                                    <form action="EditCoffee" method="post">
+                                        @if (c.isBusiness)
+                                        {
+                                            if (c.name.Contains("Burger") || c.name.Contains("burger"))
+                                            {
+                        <a href="#" class="img" style="background-image: url(../../images/burger-@(c.img).jpg);"></a> }
+                    else
+                    {
+<a href="#" class="img" style="background-image: url(../../images/dish-@(c.img).jpg);"></a>}
+}
+                                        @if (!c.isAlcohol && !c.isBusiness)
+                                        {
+                        <a href="#" class="img" style="background-image: url(../../images/menu-@(c.img).jpg);"></a>}
+                                        @if (c.isAlcohol && !c.isBusiness)
+                                        {
+                        <a href="#" class="img" style="background-image: url(../../images/drink-@(c.img).jpg);"></a>}
+                                        <div class="text text-center pt-4">
+                                            <h3><a href="#" name="key">@c.name</a></h3>
+                                            <p class="price"><span>$@c.price</span></p>
+                                            <p class="price"><span>Stock: @c.amount</span></p>
+                                            <input type="number" required="" min="0" step="0.01" name="newPrice" placeholder="enter new price" />
+                                            <input type="number" required="" min="0" step="1" name="newAmount" placeholder="Stock: @c.amount" />
+                                            <input style="display:none" type="text" name=@c.id />
+                                            <p></p>
+                                            <p> <button name="btnSubmit" type="submit" class="btn btn-primary btn-outline-primary">Edit Product</button> </p>
+                                        </div>
+                                    </form>
+                                    <form action="DeleteDrink" method="post">
+                                        <div class="text text-center">
+                                            <input style="display:none" type="text" name=@c.id />
+                                            <button name="btnSubmit" type="submit" class="btn btn-primary btn-outline-primary">Delete Product</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>}
 
                                     </div>
                                 </div>
                             </section>
                         </div>
                         <!--Add  Coffee-->
-                        <SCRIPT LANGUAGE="JavaScript">
-                            function CoffeePreview(sel) {
-                                document.getElementById('preview').src = "" + sel.options[sel.selectedIndex].value;
-                            }
-                            //  End -->
-                        </SCRIPT>
-                        <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
+
+                        <div class="tab-pane fade show" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
                             <section class="ftco-section">
                                 <div class="container">
                                     <div style="width: 60%; margin: auto;">
                                         <form action="Create" method="post">
                                             <div class="row d-md-flex col-15 ">
                                                 <input required="" type="text" class="form-control" placeholder="Name" name="name">
-                                                <center>
 
-                                                    <select name=img size=1 onChange="CoffeePreview(this)">
+                                                <center class="btn btn-primary btn-outline-primary" style="margin-top:20px;">
+                                                    <select class="btn btn-primary btn-outline-primary" name=img size=1 onChange="CoffeePreview(this)">
                                                         @foreach (string img in alcoholImgIndex)
                                                         {
-                                                            <option value="~/images/drink-@(img).jpg"> alcohol @img </option>
-                                                        }
+                                            <option value="~/images/drink-@(img).jpg"> alcohol @img </option>
+}
                                                         @foreach (string img in coffeeImgIndex)
                                                         {
-                                                            <option value="~/images/menu-@(img).jpg"> coffee @img </option>
-                                                        }
+                                            <option value="~/images/menu-@(img).jpg"> coffee @img </option>
+}
+                                                        <option value="~/images/burger-3.jpg"> Burger Business </option>
+                                                        <option value="~/images/dish-1.jpg"> Steak Business</option>
                                                     </select>
-                                                    <p>
-                                                        <img name="preview" id='preview' src="~/images/drink-1.jpg" width=150 height=113 border=1>
+                                                    <wbr />
+                                                    <p class="img">
+                                                        <img class="img" name="preview" id='preview' src="~/images/drink-1.jpg" width=150 height=113>
                                                     <p>
 
                                                 </center>
@@ -193,6 +199,7 @@
 
                                                 @*<label style="color:antiquewhite">    Alcoholic Drink  <input class="checkbox-inline" type="checkbox" value="Alcoholic Drink" id="" name="al"></label>*@
                                                 <wbr />
+
 
                                             </div>
                                             <br />
@@ -204,107 +211,122 @@
                         </div>
 
                         <!--Tables-->
-                        <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
-                            
-                                
-                                    <div style="width: 30%; margin: auto;">
-                                        <!--Create Table-->>
-                                        <form action="CreateTable" method="post">
-                                            <div class="row d-md-flex col-15 ">
-                                                <input required="" type="number" min="1" step="1" class="form-control" placeholder="Number of seats" name="numberOfSeats">
-                                                <div class="input-group">
-                                                    <select class="form-control" name="insideOutside">
-                                                        <option style="background: black">Inside</option>
-                                                        <option style="background: black">Outside</option>
-                                                    </select>
-                                                    <button type="submit" class="btn btn-primary py-3 px-4 ">Add Table</button>
-                                                </div>
-                                                <p></p>
-                                            </div>
-                                        </form>
+                        <div class="tab-pane fade show" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
+
+
+                            <div style="width: 30%; margin: auto;">
+                                <!--Create Table-->>
+                                <form action="CreateTable" method="post">
+                                    <div class="row d-md-flex col-15 ">
+                                        <input required="" type="number" min="1" step="1" class="form-control" placeholder="Number of seats" name="numberOfSeats">
+                                        <div class="input-group">
+                                            <select class="form-control" name="insideOutside">
+                                                <option style="background: black">Inside</option>
+                                                <option style="background: black">Outside</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary py-3 px-4 ">Add Table</button>
+                                        </div>
+                                        <p></p>
                                     </div>
-                                    <br />
-                                    <br />
-                                    <!--Display Tables-->
-                                        <div style=" text-align:center;"><h2 style="color: #C49B63;"><br />Total Tables <br /></h2></div>
-                                    <div class="table-responsive custom-table-responsive ">
-                                        <table class="table custom-table" >
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Table Number</th>
-                                                    <th scope="col">Number of seats</th>
-                                                    <th scope="col">Inside\Outside</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (Tbl t in tableLst)
-                                                {
+                                </form>
+                            </div>
+                            <br />
+                            <br />
+                            <!--Display Tables-->
+                            <div style=" text-align:center;"><h2 style="color: #C49B63;"><br />Total Tables <br /></h2></div>
+                            <div class="table-responsive custom-table-responsive ">
+                                <table class="table custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Table Number</th>
+                                            <th scope="col">Number of seats</th>
+                                            <th scope="col">Inside\Outside</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (Tbl t in tableLst)
+                                        {
 
-                                        <tr scope="row">
-                                            <td>@t.tid</td>
+                            <tr scope="row">
+                                <td>@t.tid</td>
 
-                                            <td>@t.amount</td>
+                                <td>@t.amount</td>
 
-                                            @if (t.isIn)
-                                            {
-                                        <td>Inside </td> }
-                                                        else
-                                                        {
-                                        <td>Outside </td>}
+                                @if (t.isIn)
+                                {
+                <td>Inside </td>
+ }
+            else
+            {
+<td>Outside </td>
+}
 
-                                        </tr>}
-                                            </tbody>
-                                        </table>
-                                            
-                                            
-                                        <div style=" text-align: center;"><h2 style="color: #C49B63;"><br />Tables Order<br /></h2></div>
-                                        <table class="table custom-table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Order Name</th>
-                                                    <th scope="col">Table ID</th>
-                                                    <th scope="col">Order Date</th>
-                                                    <th scope="col">Inside\Outside</th>
-                                                    <th scope="col">Taken Seats/Total Seats</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (TableOrder t in tableOrderLst)
-                                                {
+                            </tr>
+}
+                                    </tbody>
+                                </table>
 
-                                                <tr scope="row">
 
-                                                    <td>
-                                                        @t.Uid
-                                                    </td>
-                                                    <td>@t.Tid</td>
-                                                    <td>@t.Date</td>
+                                <div style=" text-align: center;"><h2 style="color: #C49B63;"><br />Tables Order<br /></h2></div>
+                                <table class="table custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Order Name</th>
+                                            <th scope="col">Table ID</th>
+                                            <th scope="col">Order Date</th>
+                                            <th scope="col">Inside\Outside</th>
+                                            <th scope="col">Taken Seats/Total Seats</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (TableOrder t in tableOrderLst)
+                                        {
 
-                                                    @if (tableLst.Find(t2 => t2.tid == t.Tid).isIn)
-                                                    {
-                                                <td>Inside </td> }
-                                                                else
-                                                                {
-                                                <td>Outside </td>}
-                                                    <td>@t.NumberOfSeats.ToString() / @tableLst.Find(t2 => t2.tid == t.Tid).amount.ToString()</td>
-                                                </tr>
-                                                            }
-                                            </tbody>
-                                        </table>
-                                           
-                                       
-                                    </div>
+                            <tr scope="row">
 
-                                
-                            
-                         </div>
-                     </div>
+                                <td>
+                                    @t.Uid
+                                </td>
+                                <td>@t.Tid</td>
+                                <td>@t.Date</td>
+
+                                @if (tableLst.Find(t2 => t2.tid == t.Tid).isIn)
+                                {
+                <td>Inside </td>
+ }
+            else
+            {
+<td>Outside </td>
+}
+                                <td>@t.NumberOfSeats.ToString() / @tableLst.Find(t2 => t2.tid == t.Tid).amount.ToString()</td>
+                            </tr>}
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+
+
+
+                        </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<script src="~/Scripts/js-admin/popper.min.js"></script>
-<script src="~/Scripts/js-admin/bootstrap.min.js"></script>
-<script src="~/Scripts/js-admin/jquery-3.3.1.min.js"></script>
-<script src="~/Scripts/js-admin/main.js"></script>
+
+@if (Session["email"] == null || Session["role"].ToString() != "admin")
+{
+
+<script>
+    alert("You Are Not Authorize!");
+    document.querySelector('#auth').style.display = 'none';
+</script>
+}
+<script LANGUAGE="JavaScript">
+    function CoffeePreview(sel) {
+        document.getElementById('preview').src = "" + sel.options[sel.selectedIndex].value;
+    }                     //  End -->
+</script>

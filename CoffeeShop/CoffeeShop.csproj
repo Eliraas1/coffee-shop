@@ -137,13 +137,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202201191100437_InitialCreate.cs" />
-    <Compile Include="Migrations\202201191100437_InitialCreate.designer.cs">
-      <DependentUpon>202201191100437_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202201211058501_ss.cs" />
-    <Compile Include="Migrations\202201211058501_ss.designer.cs">
-      <DependentUpon>202201211058501_ss.cs</DependentUpon>
+    <Compile Include="Migrations\202201230950039_adsa.cs" />
+    <Compile Include="Migrations\202201230950039_adsa.designer.cs">
+      <DependentUpon>202201230950039_adsa.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Business.cs" />
@@ -251,6 +247,7 @@
     <Content Include="images\person_2.jpg" />
     <Content Include="images\person_3.jpg" />
     <Content Include="images\person_4.jpg" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Scripts\jquery-3.3.1-vsdoc.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -510,11 +507,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202201191100437_InitialCreate.resx">
-      <DependentUpon>202201191100437_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202201211058501_ss.resx">
-      <DependentUpon>202201211058501_ss.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202201230950039_adsa.resx">
+      <DependentUpon>202201230950039_adsa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

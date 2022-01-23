@@ -52,16 +52,19 @@ namespace CoffeeShop.Controllers
         public ActionResult Create()
         {
             bool al = false;
+            bool bus = false;
             string name = Request.Form["name"];
             string img = Request.Form["img"];
+            
 
             if (img.Contains("drink"))
                 al = true;
-
+            if (img.Contains("dish") || img.Contains("burger"))
+                bus = true;
             string resultString = Regex.Match(img, @"\d+").Value;
             string price = Request.Form["price"];
             int am = int.Parse(Request.Form["amount"]);
-            Drink drink = new Drink(name, resultString, price, al, am);
+            Drink drink = new Drink(name, resultString, price, al, am,bus);
             db.Drink.Add(drink);
             db.SaveChanges();
 
@@ -80,20 +83,13 @@ namespace CoffeeShop.Controllers
 
             if (coffeeKey == null)
                 return RedirectToAction("Index");
-
-
-            Drink updatedCoffee = db.Drink.Find(int.Parse(coffeeKey));
-            db.Drink.Remove(updatedCoffee);
-            db.SaveChanges();
-
-            if (!newPrice.Equals(""))
-                updatedCoffee.price = newPrice;
-            if (!newAmount.Equals(""))
-                updatedCoffee.amount = int.Parse(newAmount);
-
-            db.Drink.Add(updatedCoffee);
-            db.SaveChanges();
-
+ 
+            string strcon = ConfigurationManager.ConnectionStrings["drinksDal"].ConnectionString;
+            SqlConnection con = new SqlConnection(strcon);
+            if (con.State == System.Data.ConnectionState.Closed)
+                con.Open();
+            SqlCommand cmd = new SqlCommand(" UPDATE drinks  SET price = '" + newPrice + "',amount = " + int.Parse(newAmount) + " Where id = " + coffeeKey + "", con);
+            SqlDataReader dr = cmd.ExecuteReader();
 
             return RedirectToAction("Index");
         }

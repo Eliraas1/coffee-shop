@@ -20,8 +20,8 @@ namespace CoffeeShop.Controllers
         private Dictionary<Drink, int> cartDictionary = new Dictionary<Drink, int>();
         // GET: Account
         public ActionResult Index()
-        {   
-            ViewBag.drinks = db.Drink.ToList();                       
+        {
+            ViewBag.drinks = db.Drink.ToList();
             return View();
         }
 
@@ -75,14 +75,16 @@ namespace CoffeeShop.Controllers
             {
                 total,disc
             };
-            
-            return View("Checkout",lst);
+
+            return View("Checkout", lst);
         }
 
         public ActionResult Pay()
         {
-
-            int id = orders.orders.Count(),tid=-1;
+            int index = orders.orders.Count();
+            int id = 0, tid = -1;
+            if (index > 0)
+                id = orders.orders.ToList<Order>()[index - 1].id + 1;
             bool confirm = false, take;
             string tdate = null, date = DateTime.Now.ToString();
 
@@ -106,13 +108,14 @@ namespace CoffeeShop.Controllers
             //check if user connected, if not its a guest and have a name field in form
             string name = "";
             if (Session["email"] == null)
-                name = "Guest " + Request.Form["fn"] +" "+ Request.Form["ln"];
+                name = "Guest " + Request.Form["fn"] + " " + Request.Form["ln"];
             else
-            {               
+            {
                 name = Session["Uid"].ToString();
             }
 
-            if (Session["orderId"] != null && take == false) {
+            if (Session["orderId"] != null && take == false)
+            {
                 tableOrderKey = (Tuple<string, int>)Session["orderId"];
                 TableOrder tblOrder = tableOrderDB.TableOrder.Find(tableOrderKey.Item1, tableOrderKey.Item2);
                 tdate = tblOrder.Date;
@@ -120,7 +123,7 @@ namespace CoffeeShop.Controllers
             }
             foreach (Drink d in dict.Keys)
             {
-                orders.orders.Add(new Order(id, name, d.id, dict[d], confirm, tid, tdate, date, take , totalPrice.ToString()));
+                orders.orders.Add(new Order(id, name, d.id, dict[d], confirm, tid, tdate, date, take, totalPrice.ToString()));
                 orders.SaveChanges();
             }
 
@@ -130,8 +133,7 @@ namespace CoffeeShop.Controllers
             dict.Clear();
             Session["isPay"] = true;
             ViewBag.drinks = db.Drink.ToList();
-            
-            Session["msg"] = "payment success";
+            TempData["msg"] = "payment";
             return RedirectToAction("Index");
         }
 
@@ -146,14 +148,13 @@ namespace CoffeeShop.Controllers
 
         public ActionResult AddToCart()
         {
-            
+
             Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
 
             int p = int.Parse(Request.Form["prod"]);
             Drink d = db.Drink.Find(p);
-            int val = 0;
-            
-            if((ContainDrink(d, dict))!=null && dict[(ContainDrink(d,dict))] == d.amount)
+
+            if ((ContainDrink(d, dict)) != null && dict[(ContainDrink(d, dict))] == d.amount)
             {
                 return PartialView("ProdCount", -1); //
             }
@@ -164,12 +165,13 @@ namespace CoffeeShop.Controllers
             int count = ((List<Drink>)Session["CartProd"]).Count;
 
 
-            addDrinkToDictionary(d,dict);
+            addDrinkToDictionary(d, dict);
             ViewBag.Discount = calcDiscount(dict);
-            return PartialView("ProdCount",dict.Count);
+            return PartialView("ProdCount", dict.Count);
         }
 
-        public ActionResult Cart() {
+        public ActionResult Cart()
+        {
             Dictionary<Drink, int> dict = (Dictionary<Drink, int>)Session["CartDict"];
             //check if there is an alcohol in cart for age validation
             if (dict.Keys.Where(d => d.isAlcohol).Count() > 0)
@@ -185,11 +187,11 @@ namespace CoffeeShop.Controllers
 
         public ActionResult totalDrink(Drink d)
         {
-            return PartialView("new1",d);
+            return PartialView("new1", d);
         }
         public ActionResult UpdateCart()
         {
-            
+
             int newAmount = int.Parse(Request.Form["quantity"]);
             int did = int.Parse(Request.Form["did"]);
             //int newAmount = int.Parse(TempData["quantity"].ToString());
@@ -214,7 +216,7 @@ namespace CoffeeShop.Controllers
             };
             TempData["disc"] = disc;
             TempData["total"] = total;
-            return PartialView("new",lst);
+            return PartialView("new", lst);
         }
 
         public ActionResult UpdateCart1()
@@ -229,7 +231,7 @@ namespace CoffeeShop.Controllers
         /*    Cart Help Functions      */
         public bool isContainDrink(Dictionary<Drink, int> dict, Drink drink)
         {
-            foreach(Drink d in dict.Keys)
+            foreach (Drink d in dict.Keys)
             {
                 if (d.id == drink.id)
                 {
@@ -244,7 +246,7 @@ namespace CoffeeShop.Controllers
         {
             if (dict.Count() <= 0)
                 return null;
-            
+
             foreach (Drink d in dict.Keys)
             {
                 if (d.id == drink.id)
@@ -276,12 +278,12 @@ namespace CoffeeShop.Controllers
                 if (drink.isAlcohol)
                     continue;
 
-                
+
                 count += dict[drink];
-                if((count/10) > 0)
-                    discount += (count/10) * float.Parse(drink.price); 
+                if ((count / 10) > 0)
+                    discount += (count / 10) * float.Parse(drink.price);
             }
-            
+
             return discount;
         }
 
@@ -292,7 +294,7 @@ namespace CoffeeShop.Controllers
             if (businessLst.Count == 0)
                 return disc;
 
-            foreach(Drink drink in businessLst)
+            foreach (Drink drink in businessLst)
             {
                 disc += (float.Parse(drink.price) * (float)0.1) * dict[drink];
             }
@@ -305,7 +307,7 @@ namespace CoffeeShop.Controllers
         public float calcTotal(Dictionary<Drink, int> dict)
         {
             float total = 0;
-            foreach(Drink d in dict.Keys)
+            foreach (Drink d in dict.Keys)
             {
                 total += float.Parse(d.price) * dict[d];
             }
@@ -314,7 +316,7 @@ namespace CoffeeShop.Controllers
         }
 
         public bool isVip()
-        {    
+        {
             if (Session["email"] == null)
                 return false;
 
@@ -335,7 +337,7 @@ namespace CoffeeShop.Controllers
 
             strLst = s.Split(',');
             int count = 0;
-            foreach(Drink d in dict.Keys.ToList())
+            foreach (Drink d in dict.Keys.ToList())
             {
                 int newAmount = int.Parse(strLst[count++]);
 
@@ -344,7 +346,7 @@ namespace CoffeeShop.Controllers
                 else if (newAmount == 1)
                     continue;
                 else
-                dict[d] = newAmount;
+                    dict[d] = newAmount;
             }
 
             return dict;
@@ -422,7 +424,7 @@ namespace CoffeeShop.Controllers
         public List<Drink> sortByBusinessLunch()
         {
             List<Drink> d = db.Drink.ToList<Drink>();
-            d = db.Drink.AsEnumerable().Where(drink=>drink.isBusiness).ToList();
+            d = db.Drink.AsEnumerable().Where(drink => drink.isBusiness).ToList();
             return d;
         }
         /**************************************************************************/
@@ -499,20 +501,19 @@ namespace CoffeeShop.Controllers
 
         public bool isOutsideTableDays(string date)
         {
-            return !(DateTime.Parse(date).DayOfWeek.ToString().Equals("Tuesday") || DateTime.Parse(date).DayOfWeek.ToString().Equals("Friday"));
+            return !(DateTime.Parse(date).DayOfWeek.ToString().Equals("Sunday") || DateTime.Parse(date).DayOfWeek.ToString().Equals("Friday"));
         }
         public void CheckAvailableAndBookOrder(string numberOfSeats, bool isIn, string date, string name = null)
         {
             //Outside tables not available in Tusday or Friday 
-            if(!isIn && !isOutsideTableDays(date))
+            if (!isIn && !isOutsideTableDays(date))
             {
-                while (true)
-                {
-                    Response.Write("<script>alert('Outside are not available in Tusday or Friday')</script>");                    
+                
+                    Session["msgOutside"] = true;
                     return;
-                }
+                
             }
-            
+
             List<Tbl> tableList = tableDB.tbls.AsEnumerable().Where(tb => (tb.amount >= int.Parse(numberOfSeats))).ToList();
             if (tableList.Count() == 0)
                 return;

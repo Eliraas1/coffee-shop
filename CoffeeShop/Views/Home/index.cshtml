@@ -1,19 +1,19 @@
-﻿
-@using CoffeeShop.Models
+﻿@using CoffeeShop.Models
 @{ Layout = "~/Views/Shared/_Layout.cshtml";
     List<Drink> drinks = (List<Drink>)ViewBag.drinks;
     List<Drink> alcohol = drinks.Where(d => d.isAlcohol).ToList();
     List<Drink> coffees = drinks.Where(d => (!d.isAlcohol)).ToList();
     List<Drink> mostPopularCoffees = coffees.OrderByDescending(c => c.popular).ToList();
-
+   
  }
 
-@if (Session["msg"] != null)
+@if(Session["isPay"] != null)
 {
+
     <script>
-        alert("Payment done");
+        alert("Payment Success!");
     </script>
-    { Session["msg"] = null; }
+    { Session["isPay"] = null; }
 }
 
 <section class="home-slider owl-carousel">
