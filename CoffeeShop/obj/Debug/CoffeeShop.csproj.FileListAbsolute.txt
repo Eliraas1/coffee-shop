@@ -331,7 +331,6 @@ C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeSh
 C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeShop.csproj.CopyComplete
 C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeShop.dll
 C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeShop.pdb
-C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeShop.Migrations.db.resources
 C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeShop.csproj.GenerateResource.cache
 C:\Users\Eliran\Desktop\coffee-shop-omer\CoffeeShop\bin\CoffeeShop.dll.config
 C:\Users\Eliran\Desktop\coffee-shop-omer\CoffeeShop\bin\CoffeeShop.dll
@@ -676,3 +675,4 @@ C:\Users\attia\Desktop\CShop\CoffeeShop\obj\Debug\CoffeeShop.pdb
 C:\Users\attia\Desktop\CShop\CoffeeShop\obj\Debug\CoffeeShop.Migrations.k.resources
 C:\Users\attia\Desktop\CShop\CoffeeShop\obj\Debug\CoffeeShop.csproj.GenerateResource.cache
 C:\Users\attia\Desktop\CShop\CoffeeShop\obj\Debug\CoffeeShop.csproj.AssemblyReference.cache
+C:\Users\attia\Desktop\mvc\CoffeeShopp\coffee-shop\CoffeeShop\obj\Debug\CoffeeShop.Migrations.k.resources

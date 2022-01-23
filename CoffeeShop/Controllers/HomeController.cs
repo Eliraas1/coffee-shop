@@ -81,8 +81,10 @@ namespace CoffeeShop.Controllers
 
         public ActionResult Pay()
         {
-
-            int id = orders.orders.Count(),tid=-1;
+            int index = orders.orders.Count();
+            int id = 0 ,tid=-1;
+            if (index > 0)
+                id = orders.orders.ToList<Order>()[index-1].id + 1;
             bool confirm = false, take;
             string tdate = null, date = DateTime.Now.ToString();
 
